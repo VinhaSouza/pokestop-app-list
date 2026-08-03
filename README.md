@@ -1,0 +1,1 @@
+# pokestop-app-list
