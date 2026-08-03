@@ -1,5 +1,4 @@
-import { forwardRef, LegacyRef } from "react";
-import { StyleSheet, TextInput, Text, View, Dimensions, TextInputProps } from "react-native";
+import { StyleSheet, TextInput, Text, View, TextInputProps } from "react-native";
 
 export function Input({...rest}: TextInputProps){
     return(
@@ -10,7 +9,6 @@ export function Input({...rest}: TextInputProps){
     )
 }
     
-
 const style = StyleSheet.create({
     formBox: {
         width: '100%',
