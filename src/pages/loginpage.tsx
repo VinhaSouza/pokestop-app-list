@@ -4,7 +4,11 @@ import { Input } from '../components/Input';
 import { useState } from 'react';
 import { Button } from '../components/Button';
 
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+
 export default function LoginPage() {
+
+    const navigation = useNavigation<NavigationProp<any>>();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -14,6 +18,8 @@ export default function LoginPage() {
             if(!email || !password) {
                 return Alert.alert("Atenção", "Os campos precisam ser preenchidos!")
             } 
+
+            navigation.navigate("HomeRoutes")
             
             console.log("Usuário logado!")
 
@@ -44,7 +50,7 @@ export default function LoginPage() {
 
                 <Text style={style.titleInput}>SENHA</Text>
                 <Input 
-                    keyboardType='numeric'
+                    keyboardType='default'
                     secureTextEntry
                     value={password}
                     onChangeText={setPassword}
