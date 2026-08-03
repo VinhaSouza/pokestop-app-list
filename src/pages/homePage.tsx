@@ -1,12 +1,4 @@
-import React from 'react'
-import { Text, StyleSheet } from 'react-native'
-
 export default function HomePage () {
-    return (
-        <Text>Hello</Text>
-    )
+    return 
 }
 
-const style = StyleSheet.create({
-
-})
