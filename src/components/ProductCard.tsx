@@ -1,4 +1,5 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
+import { formatName } from '../utils/formatName';
 
 interface Props {
     name: string;
@@ -14,8 +15,8 @@ export function ProductCard({ name, image, price }: Props) {
                 style={style.imageProduct}
                 resizeMode='contain'
             />
-            <Text style={style.nameProduct}>{name}</Text>
-            <Text style={style.priceProduct}>{price}</Text>
+            <Text style={style.nameProduct}>{formatName(name)}</Text>
+            <Text style={style.priceProduct}>G {price}</Text>
         </View>
     )
 }
