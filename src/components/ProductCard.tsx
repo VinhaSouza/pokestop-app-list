@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View } from 'react-native'
 interface Props {
     name: string;
     image: string;
-    price: string;
+    price: number;
 }
 
 export function ProductCard({ name, image, price }: Props) {
@@ -14,7 +14,6 @@ export function ProductCard({ name, image, price }: Props) {
                 style={style.imageProduct}
                 resizeMode='contain'
             />
-
             <Text style={style.nameProduct}>{name}</Text>
             <Text style={style.priceProduct}>{price}</Text>
         </View>
