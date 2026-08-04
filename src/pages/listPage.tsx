@@ -7,35 +7,39 @@ import { ProductCard } from '../components/ProductCard'
 import { prices } from '../data/prices'
 import { storeItems } from '../data/storeItems'
 
-export default function listPage () {
-    const [item, setItem] = useState<any>('');
-    const price = item ? prices[item.name] : 0
-    const productList = [
-        {
-            name: item?.name,
-            image: item?.sprites?.default,
-            price: price
-        }
-    ]
+interface dataProduct {
+    name: string;
+    image: string;
+    price: number;
+}
+
+export default function ListPage () {
+    const [items, setItems] = useState<dataProduct[]>([]);
 
     useEffect(() => {
-        async function getItem() {
-            const response = await api.get(`/item/${storeItems[19]}`);
-            setItem(response.data);  
+        async function getItems() {
+            const products: dataProduct[] = [];
+                for (const itemName of storeItems) {
+                    const response = await api.get(`/item/${itemName}`);
+
+                    products.push({
+                        name: response.data.name,
+                        image: response.data.sprites.default,
+                        price: prices[itemName],
+                    });
+                }
+                setItems(products);  
+                console.log("Produtos Carregados!");
         }
-        
-        getItem();
-        
+        getItems();
     },[]);
 
-    console.log(item);
-
-   return (
+    return (
         <View style={style.container}>
             <Header />
 
             <FlatList
-                data={productList}
+                data={items}
                 numColumns={2}
                 keyExtractor={(item) => item.name}
                 columnWrapperStyle={style.row} // Aplica um estilo em cada linha da lista.
