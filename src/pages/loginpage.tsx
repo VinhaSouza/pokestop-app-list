@@ -1,5 +1,5 @@
 import { Text, StyleSheet, View, Image, Dimensions, Alert } from 'react-native';
-import Logo from '../assets/bem-vinda.png';
+import Logo from '../assets/logo-pokeapp.png';
 import { Input } from '../components/Input';
 import { useState } from 'react';
 import { Button } from '../components/Button';
@@ -37,7 +37,7 @@ export default function LoginPage() {
                     style={style.logo}
                     resizeMode='contain'
                 />
-                <Text style={style.title}>Bem-vindo de volta!</Text>
+                <Text style={style.title}>Bem-vindo de volta, Treinador(a)!</Text>
             </View>
 
             <View style={style.inputBox}>
@@ -88,13 +88,14 @@ const style = StyleSheet.create({
        alignItems: 'center',
     },
     logo: {
-        width: 100,
-        height: 100,
+        width: 200,
+        height: 200,
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 26,
+        fontSize: 20,
         marginTop: 16,
+        marginBottom: 16,
     },
     titleInput: {
         color: 'gray',
