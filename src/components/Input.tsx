@@ -1,10 +1,14 @@
-import { StyleSheet, TextInput, Text, View, TextInputProps } from "react-native";
+import { StyleSheet, TextInput, Text, View, TextInputProps, Image } from "react-native";
 
 export function Input({...rest}: TextInputProps){
     return(
         <View style={style.formBox}>
             <TextInput style={style.input} {...rest}/>
-            <Text>Icon</Text>
+            <Image
+                source={require('../assets/pixel-ball-icon.png')}
+                style={style.icon}
+                resizeMode='contain'
+            />
         </View>
     )
 }
@@ -26,5 +30,10 @@ const style = StyleSheet.create({
         height: '100%',
         paddingHorizontal: 10,
     },
+    icon: {
+        width: 30,
+        height: 30,
+        marginRight: 10,
+    }
 
 })
