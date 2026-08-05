@@ -21,10 +21,18 @@ const style = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        width: 200,
-        height: 50,
-        backgroundColor: '#f35959',
-        borderRadius: 40,
+        width: '80%',
+        height: 60,
+        backgroundColor: '#c22525',
+        borderRadius: 30,
+        shadowColor: "#000",
+        shadowOffset: {
+	        width: 0,
+	        height: 5,
+        },
+        shadowOpacity: 0.34,
+        shadowRadius: 6.27,
+        elevation: 8,   
     },
     buttonTitle: {
         fontSize: 16,
