@@ -28,6 +28,6 @@ const style = StyleSheet.create({
     input: {
         width:'85%',
         height: '100%',
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
     },
 })
