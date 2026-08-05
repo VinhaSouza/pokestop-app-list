@@ -1,14 +1,20 @@
-import MaterialIcons from '@react-native-vector-icons/material-icons'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import MaterialIcons from '@react-native-vector-icons/material-icons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 export function Header() {
+    const navigation = useNavigation<NavigationProp<any>>();
     return (
         <View style={style.container}>
             <View style={style.boxIcon}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('Login')}
+            >
                 <MaterialIcons
                     name='arrow-back'
                     size={32}
                 />
+            </TouchableOpacity>
             </View>
 
             <Text style={style.title}>
