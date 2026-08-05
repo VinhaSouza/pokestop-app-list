@@ -1,6 +1,7 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { formatName } from '../utils/formatName';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 interface Props {
     name: string;
@@ -9,14 +10,19 @@ interface Props {
 }
 
 export function ProductCard({ name, image, price }: Props) {
+    const navigation = useNavigation<NavigationProp<any>>();
     return (
         <View style={style.cardsProcuct}>
             <View style={style.imageBox}>
-                <Image
-                    source={{uri: image}}
-                    style={style.imageProduct}
-                    resizeMode='contain'
-                />
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('DetailRoutes')}
+                >
+                    <Image
+                        source={{uri: image}}
+                        style={style.imageProduct}
+                        resizeMode='contain'
+                    />
+                </TouchableOpacity>
             </View>
 
             <Text style={style.nameProduct}>{formatName(name)}</Text>
