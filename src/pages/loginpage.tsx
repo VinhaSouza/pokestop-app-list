@@ -1,8 +1,10 @@
-import { Text, StyleSheet, View, Image, Dimensions, Alert } from 'react-native';
+import { Text, StyleSheet, View, Image, Dimensions, Alert, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity } from 'react-native';
 import Logo from '../assets/logo-pokeapp.png';
 import { Input } from '../components/Input';
 import { useState } from 'react';
 import { Button } from '../components/Button';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
@@ -12,63 +14,95 @@ export default function LoginPage() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setshowPassword] = useState(false);
 
     function getLogin(){
-        try {
-            if(!email || !password) {
-                return Alert.alert("Atenção", "Os campos precisam ser preenchidos!")
-            } 
-
-            navigation.navigate("HomeRoutes")
-            
-            console.log("Usuário logado!")
-
-        } catch (error) {
-            console.log('error')
-        }
+        if(!email || !password) {
+            return Alert.alert("Atenção", "Os campos precisam ser preenchidos!")
+        } 
+        navigation.navigate("HomeRoutes")
+        console.log("Usuário logado!")
     }
 
     return (
-        <View style={style.container}>
-            
-            <View style={style.logoBox}>
-                <Image
-                    source={Logo}
-                    style={style.logo}
-                    resizeMode='contain'
-                />
-                <Text style={style.title}>Bem-vindo de volta, Treinador(a)!</Text>
-            </View>
+    <LinearGradient
+        colors={['#8e0114', '#f06666']}
+        start={{x: 0.85, y: 0.85}}
+        end={{x: 0.15, y: 0.15}}
+        style={style.container}
+    >
+    <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+        <ScrollView style={style.scrollContainer}>
+            <View style={style.viewContainer}>
+                <View style={style.logoBox}>
+                    <Image
+                        source={Logo}
+                        style={style.logo}
+                        resizeMode='contain'
+                    />
+                    
+                    <Text style={style.title}>Bem-vindo de Volta, {"\n"} Treinador(a)!</Text>
+                </View>
 
-            <View style={style.inputBox}>
-                <Text style={style.titleInput}>ENDEREÇO DE E-MAIL</Text>
-                <Input 
-                    keyboardType='email-address'
-                    value={email}
-                    onChangeText={setEmail}
-                />
+                <View style={style.inputBox}>
+                    <Text style={style.titleInput}>ENDEREÇO DE E-MAIL</Text>
+                    
+                    <Input 
+                        keyboardType='email-address'
+                        value={email}
+                        onChangeText={setEmail} 
+                        icon={
+                            <MaterialIcons 
+                                name='email' 
+                                size={24}
+                                color='#a5a3a3'/>
+                        }
+                    />
+                  
+                    <Text style={style.titleInput}>SENHA</Text>
 
-                <Text style={style.titleInput}>SENHA</Text>
-                <Input 
-                    keyboardType='default'
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
-                />
-            </View>
+                    <Input 
+                        keyboardType='default'
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={!showPassword}
+                        icon={
+                            <TouchableOpacity
+                                onPress={() => setshowPassword(!showPassword)}
+                            >
+                            <MaterialIcons
+                                name={showPassword? 'visibility' : 'visibility-off'}
+                                size={24}
+                                color="#a5a3a3"
+                            />  
+                            </TouchableOpacity>
+                        }
+                    />
+                </View>
 
-            <View style={style.buttonBox}>
-                <Button text='ENTRAR' onPress={()=>getLogin()}/>
+                <View style={style.buttonBox}>
+                    <Button text='ENTRAR' onPress={()=>getLogin()}/>
+                </View>
             </View>
-        </View>
+        </ScrollView>
+    </KeyboardAvoidingView>
+                </LinearGradient>
     )
 }
 
 const style = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    scrollContainer: {
+        padding: 10,
+    },
+    viewContainer: {
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: 150,
     },
     logoBox: {
        width: '100%',
@@ -82,23 +116,29 @@ const style = StyleSheet.create({
        alignItems: 'flex-start',
        paddingHorizontal: 37,
     },
+    formBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     buttonBox: {
         width: '100%',
        height: Dimensions.get('window').height/5,
        alignItems: 'center',
     },
     logo: {
-        width: 200,
-        height: 200,
+        width: '70%',
+        height: '70%',
     },
     title: {
+        color: '#722020',
         fontWeight: 'bold',
-        fontSize: 20,
-        marginTop: 16,
-        marginBottom: 16,
+        fontSize: 30,
+        textAlign: 'center',
+        paddingTop: 30,
+        paddingBottom:'20%',
     },
     titleInput: {
-        color: 'gray',
+        color: '#dcdcdc',
         marginTop: 10,
         paddingHorizontal: 10,
     }
