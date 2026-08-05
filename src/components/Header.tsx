@@ -1,42 +1,47 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import MaterialIcons from '@react-native-vector-icons/material-icons'
+import { StyleSheet, Text, View } from 'react-native'
 
 export function Header() {
     return (
-        <SafeAreaView>
         <View style={style.container}>
-            <Image 
-                source={require("../assets/pixel-ball-icon.png")}
-                style={style.icon}
-            />
+            <View style={style.boxIcon}>
+                <MaterialIcons
+                    name='arrow-back'
+                    size={32}
+                />
+            </View>
 
             <Text style={style.title}>
                 PRODUTOS{"\n"}EM DESTAQUE
             </Text>
 
-            <Image 
-                source={require("../assets/pixel-ball-icon.png")}
-                style={style.icon}
-            />
+            <View style={style.boxIcon}>
+                <MaterialIcons
+                    name='shopping-cart'
+                    size={32}
+                />
+            </View>
         </View>
-        </SafeAreaView>
     )
 }
 
 const style = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: '#c22525',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        paddingVertical: 20,
+        marginTop: 40,
     },
-    icon: {
-        width: 35,
-        height: 35
+    boxIcon:{
+        backgroundColor: 'white',
+        borderRadius: '100%',
+        padding: 6,
     },
     title: {
         fontSize: 24,
+        padding: 10,
+        color: 'white',
         fontWeight: '900',
         textAlign: 'center',
     }
