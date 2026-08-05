@@ -1,12 +1,12 @@
-import React from 'react'
-import { useEffect,useState } from 'react'
-import { api } from '../services/api'
-import { StyleSheet, View, FlatList } from 'react-native'
-import { Header } from '../components/Header'
-import { ProductCard } from '../components/ProductCard'
-import { prices } from '../data/prices'
-import { storeItems } from '../data/storeItems'
-import { Input } from '../components/Input'
+import React from 'react';
+import { useEffect,useState } from 'react';
+import { api } from '../services/api';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { Header } from '../components/Header';
+import { ProductCard } from '../components/ProductCard';
+import { prices } from '../data/prices';
+import { storeItems } from '../data/storeItems';
+import { Input } from '../components/Input';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 interface dataProduct {
@@ -16,6 +16,7 @@ interface dataProduct {
 }
 
 export default function ListPage () {
+
     const [items, setItems] = useState<dataProduct[]>([]);
 
     useEffect(() => {

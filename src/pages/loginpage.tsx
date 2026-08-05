@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { Button } from '../components/Button';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 export default function LoginPage() {
