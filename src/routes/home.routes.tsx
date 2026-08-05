@@ -1,5 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import listPage from "../pages/listPage";
+import ListPage from "../pages/listPage";
+import DetailRoutes from "./detail.routes";
 
 const Stack = createStackNavigator();
 
@@ -15,7 +16,12 @@ export default function HomeRoutes() {
         >
             <Stack.Screen
                 name="List"
-                component={listPage}
+                component={ListPage}
+            />
+
+            <Stack.Screen
+                name="DetailRoutes"
+                component={DetailRoutes}
             />
         </Stack.Navigator>
     )
