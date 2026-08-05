@@ -6,6 +6,8 @@ import { Header } from '../components/Header'
 import { ProductCard } from '../components/ProductCard'
 import { prices } from '../data/prices'
 import { storeItems } from '../data/storeItems'
+import { Input } from '../components/Input'
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 interface dataProduct {
     name: string;
@@ -33,6 +35,20 @@ export default function ListPage () {
         }
         getItems();
     },[]);
+    
+    const RenderInputHeader = () => (
+        <View style={style.searchBox}>
+            <Input
+                placeholder='Pesquise os itens aqui'
+                icon={
+                    <MaterialIcons 
+                        name='search' 
+                        size={24}
+                        color='#a5a3a3'/>
+                }
+            />
+        </View>
+    );
 
     return (
         <View style={style.container}>
@@ -51,20 +67,25 @@ export default function ListPage () {
                         price={item.price}  
                     />
                 )}
-            />     
+                ListHeaderComponent={RenderInputHeader}
+            />
         </View>  
    )
 }
    
 const style = StyleSheet.create({
-    container: {
-       flex: 1,    
-       backgroundColor: '#d34747'
+   container: {
+    flex: 1,    
    },
    row: {
     justifyContent: 'space-between'
    },
    list: {
     padding: 10
+   },
+   searchBox: {
+    marginHorizontal: 20,
+    width: '90%',
+    paddingBottom: 20,
    },
 })
