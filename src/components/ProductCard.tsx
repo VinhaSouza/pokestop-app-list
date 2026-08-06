@@ -1,40 +1,43 @@
+import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { formatName } from '../utils/formatName';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { ButtonIcon } from './ButtonIcon';
 
 interface Props {
     name: string;
     image: string;
     price: number;
+    onPress: () => void;
 }
 
-export function ProductCard({ name, image, price }: Props) {
-    const navigation = useNavigation<NavigationProp<any>>();
+export function ProductCard({ name, image, price, onPress }: Props) {
     return (
         <View style={style.cardsProcuct}>
-            <View style={style.imageBox}>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('DetailRoutes')}
-                >
-                    <Image
-                        source={{uri: image}}
-                        style={style.imageProduct}
-                        resizeMode='contain'
-                    />
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+                style={style.imageBox}
+                onPress={onPress}
+            >
+                <Image
+                    source={{uri: image}}
+                    style={style.imageProduct}
+                    resizeMode='contain'
+                />
+            </TouchableOpacity>
+            
 
             <Text style={style.nameProduct}>{formatName(name)}</Text>
             
             <View style={style.shopBox}>
                 <Text style={style.priceProduct}>G {price}</Text>
-                
-                <MaterialIcons 
-                    style={style.iconBox}
-                    name='add' 
-                    size={24}
-                    color='white'/>
+            
+                <ButtonIcon
+                    text=''
+                    onPress={() => navigation.navigate('')}
+                    icon={
+                        <MaterialIcons style={style.iconBox} name='add' size={24} color='white'/>
+                    }
+                />
             </View>
         </View>
     )
@@ -58,10 +61,11 @@ const style = StyleSheet.create ({
         marginBottom: 10
     },
     shopBox:{
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems:'center'
     },
     nameProduct: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: '600',
         textAlign: 'left',
         paddingLeft: 10,
@@ -74,7 +78,7 @@ const style = StyleSheet.create ({
         paddingLeft: 10,
     },
     iconBox:{
-        marginLeft: '30%',
+        marginHorizontal: 40,
         backgroundColor: '#c22525',
         borderRadius: 100,
         padding: 10,
