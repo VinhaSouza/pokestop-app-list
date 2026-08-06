@@ -8,6 +8,7 @@ import { storeItems } from '../data/storeItems';
 import { Input } from '../components/Input';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { ButtonIcon } from '../components/ButtonIcon';
 
 interface dataProduct {
     name: string;
@@ -54,7 +55,21 @@ export default function ListPage () {
 
     return (
         <View style={style.container}>
-            <Header />
+            <View style={style.containerHeader}>
+            <ButtonIcon
+                text=''
+                icon={<MaterialIcons name='arrow-back' size={35} color='white'/>}
+            />
+            <Header
+                text='PRODUTOS'
+            />
+            <ButtonIcon
+                text=''
+                onPress={() => navigation.navigate('ShoppingCart')}
+                icon={
+                    <MaterialIcons name='shopping-cart' size={35} color='white'/>}
+            />
+            </View>
 
             <FlatList
                 data={items}
@@ -79,6 +94,14 @@ export default function ListPage () {
 const style = StyleSheet.create({
    container: {
     flex: 1,    
+   },
+   containerHeader:{
+        backgroundColor: '#c22525',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        marginTop: 40,
+        paddingBottom: 10,
    },
    row: {
     justifyContent: 'space-between'
