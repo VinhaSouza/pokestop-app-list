@@ -3,6 +3,7 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { formatName } from '../utils/formatName';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { ButtonIcon } from './ButtonIcon';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 interface Props {
     name: string;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function ProductCard({ name, image, price, onPress }: Props) {
+    const navigation = useNavigation<NavigationProp<any>>();
     return (
         <View style={style.cardsProcuct}>
             <TouchableOpacity
@@ -33,9 +35,9 @@ export function ProductCard({ name, image, price, onPress }: Props) {
             
                 <ButtonIcon
                     text=''
-                    onPress={() => navigation.navigate('')}
+                    onPress={() => navigation.navigate('ShoppingCart')}
                     icon={
-                        <MaterialIcons style={style.iconBox} name='add' size={24} color='white'/>
+                        <MaterialIcons style={style.iconBox} name='add-shopping-cart' size={30} color='white'/>
                     }
                 />
             </View>
@@ -81,6 +83,6 @@ const style = StyleSheet.create ({
         marginHorizontal: 40,
         backgroundColor: '#c22525',
         borderRadius: 100,
-        padding: 10,
+        padding: 12,
     },
 })
