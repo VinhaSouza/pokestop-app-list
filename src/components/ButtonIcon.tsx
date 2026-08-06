@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
+import { TouchableOpacity, TouchableOpacityProps, Text } from 'react-native'
 
 type Props = TouchableOpacityProps & {
     text:string,
@@ -8,7 +8,8 @@ type Props = TouchableOpacityProps & {
 
 export function ButtonIcon({icon,...rest}: Props) {;
     return(
-            <TouchableOpacity {...rest}>            
+            <TouchableOpacity {...rest}>  
+                <Text>{rest.text}</Text>          
                 {icon} 
             </TouchableOpacity>
     )
