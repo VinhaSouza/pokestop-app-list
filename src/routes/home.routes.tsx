@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ListPage from "../pages/ListPage";
 import ProductDetailPage from "../pages/ProductDetailPage";
 import { RootStackParamList } from "../@types/routes";
+import ShoppingCartPage from "../pages/ShoppingCartPage";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -25,6 +26,12 @@ export default function HomeRoutes() {
                 name="ProductDetail"
                 component={ProductDetailPage}
             />
+
+            <Stack.Screen
+                name="ShoppingCart"
+                component={ShoppingCartPage}
+            />
+            
         </Stack.Navigator>
     )
 }
