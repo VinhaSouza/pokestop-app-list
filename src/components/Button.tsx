@@ -1,6 +1,6 @@
-import { ActivityIndicator, StyleSheet, Text, TouchableHighlightProps, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacityProps, TouchableOpacity } from 'react-native';
 
-type Props = TouchableHighlightProps & {
+type Props = TouchableOpacityProps & {
     text:string,
     loading?:boolean
 }
