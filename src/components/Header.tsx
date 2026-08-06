@@ -1,32 +1,33 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { ButtonIcon } from './ButtonIcon';
 
 export function Header() {
     const navigation = useNavigation<NavigationProp<any>>();
     return (
         <View style={style.container}>
-            <View style={style.boxIcon}>
-            <TouchableOpacity
+            <ButtonIcon
+                style={style.boxIcon}
+                text=''
                 onPress={() => navigation.navigate('Login')}
-            >
-                <MaterialIcons
-                    name='arrow-back'
-                    size={32}
-                />
-            </TouchableOpacity>
-            </View>
-
+                icon={
+                    <MaterialIcons name='arrow-back' size={32}/>
+                }
+            />
+      
             <Text style={style.title}>
                 PRODUTOS{"\n"}EM DESTAQUE
             </Text>
 
-            <View style={style.boxIcon}>
-                <MaterialIcons
-                    name='shopping-cart'
-                    size={32}
-                />
-            </View>
+            <ButtonIcon
+                style={style.boxIcon}
+                text=''
+                onPress={() => navigation.navigate('')}
+                icon={
+                    <MaterialIcons name='shopping-cart' size={32}/>
+                }
+            />
         </View>
     )
 }
