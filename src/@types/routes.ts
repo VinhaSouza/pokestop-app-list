@@ -5,4 +5,7 @@ export type RootStackParamList = {
         price: number;
         image: string;
     }
+    ShoppingCart: {
+        name: string;
+    }
 }
