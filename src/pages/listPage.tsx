@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { Header } from '../components/Header';
@@ -8,6 +7,7 @@ import { prices } from '../data/prices';
 import { storeItems } from '../data/storeItems';
 import { Input } from '../components/Input';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 interface dataProduct {
     name: string;
@@ -16,6 +16,7 @@ interface dataProduct {
 }
 
 export default function ListPage () {
+    const navigation = useNavigation<NavigationProp<any>>();
 
     const [items, setItems] = useState<dataProduct[]>([]);
 
@@ -65,7 +66,8 @@ export default function ListPage () {
                     <ProductCard
                         name={item.name}
                         image={item.image}
-                        price={item.price}  
+                        price={item.price} 
+                        onPress={() => navigation.navigate('ProductDetail', {name: item.name, price: item.price, image: item.image})}
                     />
                 )}
                 ListHeaderComponent={RenderInputHeader}
