@@ -1,8 +1,10 @@
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import ListPage from "../pages/listPage";
-import DetailRoutes from "./detail.routes";
+import ListPage from "../pages/ListPage";
+import ProductDetailPage from "../pages/ProductDetailPage";
+import { RootStackParamList } from "../@types/routes";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function HomeRoutes() {
     return(
@@ -20,8 +22,8 @@ export default function HomeRoutes() {
             />
 
             <Stack.Screen
-                name="DetailRoutes"
-                component={DetailRoutes}
+                name="ProductDetail"
+                component={ProductDetailPage}
             />
         </Stack.Navigator>
     )
