@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RootStackParamList } from '../@types/routes';
 import { api } from '../services/api';
 import { ButtonIcon } from '../components/ButtonIcon';
 import { useNavigation, NavigationProp, useRoute, RouteProp } from '@react-navigation/native';
 import { formatName } from '../utils/formatName';
 import { LinearGradient } from 'expo-linear-gradient';
+import { CartContext } from '../contexts/CartContext';
+import MaterialIcons from '@react-native-vector-icons/material-icons';
+
 
 export default function ProductDetailPage () {
-    const navigation = useNavigation<NavigationProp<any>>()
+    //const navigation = useNavigation<NavigationProp<any>>()
     const route = useRoute<RouteProp<RootStackParamList, 'ProductDetail'>>();
     const { name } = route.params;
     const { price } = route.params;
     const { image } = route.params;
     const [item, setItem] = useState<any>('');
+    const { increase, decrease, getQuantity } = useContext(CartContext);
+    const quantity = getQuantity(name);
 
     async function getItems() {
         const response = await api.get(`/item/${name}`);
@@ -43,10 +48,23 @@ export default function ProductDetailPage () {
             
                     <Text style={style.price}> G {price}</Text>
 
-                    <Text> - Quantidade + </Text> 
-           
-                    <ButtonIcon style={style.addButton} text="ADICIONAR AO CARRINHO" onPress={() => navigation.navigate('ShoppingCart')}/>
-            
+                    <View style={style.countBox}>
+                    
+                        <ButtonIcon 
+                            style={style.buttonAdd}    
+                            text=''
+                            icon={<MaterialIcons name='add' size={40} color={'red'}/>}
+                            onPress={() => increase({name, price})}/>
+                        
+
+                        <Text>{quantity}</Text>
+
+                        <TouchableOpacity style={style.buttonMinus} onPress={() => decrease(name)}>   
+                            <Text> - </Text>
+                        </TouchableOpacity>
+
+                    </View>
+
                     <Text style={style.description}>
                         {item?.effect_entries?.find((text: any) => text.language.name === 'en')?.effect}
                     </Text>
@@ -87,13 +105,15 @@ const style = StyleSheet.create({
         color: 'red',
         marginBottom: 15,
     },
-    addButton: {
-        margin: 10,
-        backgroundColor: '#c22525',
-        padding: 12,
-        width: 200,
-        borderRadius: 60,
-        alignItems: 'center',
+    buttonAdd: {
+
+    },
+    countBox: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+    },
+    buttonMinus: {
+
     },
     description: {
         textAlign: 'justify',
