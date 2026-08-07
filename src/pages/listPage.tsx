@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { api } from '../services/api';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { Header } from '../components/Header';
 import { ProductCard } from '../components/ProductCard';
 import { prices } from '../data/prices';
@@ -9,6 +9,7 @@ import { Input } from '../components/Input';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { ButtonIcon } from '../components/ButtonIcon';
+import { CartContext } from '../contexts/CartContext';
 
 interface dataProduct {
     name: string;
@@ -18,8 +19,8 @@ interface dataProduct {
 
 export default function ListPage () {
     const navigation = useNavigation<NavigationProp<any>>();
-
     const [items, setItems] = useState<dataProduct[]>([]);
+    const { totalItems } = useContext(CartContext)
 
     useEffect(() => {
         async function getItems() {
@@ -43,33 +44,33 @@ export default function ListPage () {
         <View style={style.searchBox}>
             <Input
                 placeholder='Pesquise os itens aqui'
-                icon={
-                    <MaterialIcons 
-                        name='search' 
-                        size={24}
-                        color='#a5a3a3'/>
-                }
+                icon={<MaterialIcons name='search' size={24} color='#a5a3a3'/>}
             />
         </View>
     );
 
+
     return (
         <View style={style.container}>
             <View style={style.containerHeader}>
-            <ButtonIcon
-                text=''
-                icon={<MaterialIcons name='arrow-back' size={35} color='white'/>}
-            />
-            <Header
-                text='PRODUTOS'
-            />
-            <ButtonIcon
-                text=''
-                onPress={() => navigation.navigate('ShoppingCart')}
-                icon={
-                    <MaterialIcons name='shopping-cart' size={35} color='white'/>}
-            />
+                <ButtonIcon
+                    text=''
+                    icon={<MaterialIcons name='arrow-back' size={35} color='white'/>}
+                    onPress={() => navigation.navigate('Login')}
+                />
+
+                <Header text='PRODUTOS'/>
+
+                <View style={style.cartBox}>
+                    <ButtonIcon
+                        text=''
+                        icon={<MaterialIcons name='shopping-cart' size={35} color={'white'}/>}
+                        onPress={() => navigation.navigate('ShoppingCart')}
+                    />
+                    <Text style={style.iconCount}>{totalItems}</Text>
+                </View>
             </View>
+
 
             <FlatList
                 data={items}
@@ -102,6 +103,18 @@ const style = StyleSheet.create({
         justifyContent: 'space-around',
         marginTop: 40,
         paddingBottom: 10,
+   },
+   cartBox:{
+    flexDirection: 'row'
+   },
+   iconCount:{
+    position: 'absolute',
+    backgroundColor: 'white',
+    borderRadius: 100,
+    textAlign: 'center',
+    paddingHorizontal: 6,
+    marginLeft: 30,
+    marginTop: 5,
    },
    row: {
     justifyContent: 'space-between'
