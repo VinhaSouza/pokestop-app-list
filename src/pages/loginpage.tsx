@@ -6,6 +6,8 @@ import { Button } from '../components/Button';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { iconSizes } from '../themes/iconSizes';
+import { colors } from '../themes/colors';
 
 export default function LoginPage() {
 
@@ -25,7 +27,7 @@ export default function LoginPage() {
 
     return (
     <LinearGradient
-        colors={['#8e0114', '#f06666']}
+        colors={[colors.background, colors.backgroundsec]}
         start={{x: 0.85, y: 0.85}}
         end={{x: 0.15, y: 0.15}}
         style={style.container}
@@ -52,11 +54,7 @@ export default function LoginPage() {
                         keyboardType='email-address'
                         value={email}
                         onChangeText={setEmail} 
-                        icon={
-                            <MaterialIcons 
-                                name='email' 
-                                size={24}
-                                color='#a5a3a3'/>
+                        icon={<MaterialIcons name='email' style={style.inputIconStyle} size={iconSizes.meddium}/>
                         }
                     />
                   
@@ -71,18 +69,14 @@ export default function LoginPage() {
                             <TouchableOpacity
                                 onPress={() => setshowPassword(!showPassword)}
                             >
-                            <MaterialIcons
-                                name={showPassword? 'visibility' : 'visibility-off'}
-                                size={24}
-                                color="#a5a3a3"
-                            />  
+                            <MaterialIcons name={showPassword? 'visibility' : 'visibility-off'} style={style.inputIconStyle} size={iconSizes.meddium}/>  
                             </TouchableOpacity>
                         }
                     />
                 </View>
 
                 <View style={style.buttonBox}>
-                    <Button text='ENTRAR' onPress={()=>getLogin()}/>
+                    <Button style={style.button} text='ENTRAR' onPress={()=>getLogin()}/>
                 </View>
             </View>
         </ScrollView>
@@ -110,7 +104,7 @@ const style = StyleSheet.create({
        justifyContent: 'center',
     },
     inputBox: {
-        width: '100%',
+       width: '100%',
        height: Dimensions.get('window').height/4,
        alignItems: 'flex-start',
        paddingHorizontal: 37,
@@ -119,8 +113,24 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '80%',
+        height: 60,
+        backgroundColor: colors.primary,
+        borderRadius: 30,
+        shadowColor: colors.black,
+        shadowOffset: {
+	        width: 0,
+	        height: 5,
+        },
+        shadowOpacity: 0.34,
+        shadowRadius: 6.27,
+        elevation: 8,   
+    },
     buttonBox: {
-        width: '100%',
+       width: '100%',
        height: Dimensions.get('window').height/5,
        alignItems: 'center',
     },
@@ -129,16 +139,19 @@ const style = StyleSheet.create({
         height: '70%',
     },
     title: {
-        color: '#722020',
-        fontWeight: 'bold',
+        color: colors.secondary,
+        fontWeight: '600',
         fontSize: 30,
         textAlign: 'center',
         paddingTop: 30,
         paddingBottom:'20%',
     },
     titleInput: {
-        color: '#dcdcdc',
+        color: colors.inputBackground,
         marginTop: 10,
         paddingHorizontal: 10,
-    }
+    },
+    inputIconStyle: {
+        color: colors.inputIcon,
+    },
 })

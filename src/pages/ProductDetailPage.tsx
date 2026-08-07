@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { RootStackParamList } from '../@types/routes';
 import { api } from '../services/api';
 import { ButtonIcon } from '../components/ButtonIcon';
@@ -8,10 +8,12 @@ import { formatName } from '../utils/formatName';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CartContext } from '../contexts/CartContext';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
+import { colors } from '../themes/colors';
+import { iconSizes } from '../themes/iconSizes';
 
 
 export default function ProductDetailPage () {
-    //const navigation = useNavigation<NavigationProp<any>>()
+    //const navigation = useNavigation<NavigationProp<any>>() //Será utilizado futuramente
     const route = useRoute<RouteProp<RootStackParamList, 'ProductDetail'>>();
     const { name } = route.params;
     const { price } = route.params;
@@ -30,12 +32,11 @@ export default function ProductDetailPage () {
 
     return (
          <LinearGradient
-                colors={['#ee7181', '#eec7c7']}
+                colors={[colors.lightBackground, colors.lightBackgroundSec]}
                 start={{x: 0.85, y: 0.85}}
                 end={{x: 0.15, y: 0.15}}
                 style={style.container}
             >
-            <View style={style.container}>
                 <View style={style.imageBox}>
                     <Image
                         source={{uri: image}}
@@ -48,28 +49,25 @@ export default function ProductDetailPage () {
             
                     <Text style={style.price}> G {price}</Text>
 
+                        <Text>Adicionar ao Carrinho</Text>
                     <View style={style.countBox}>
-                    
-                        <ButtonIcon 
-                            style={style.buttonAdd}    
+                        <ButtonIcon     
                             text=''
-                            icon={<MaterialIcons name='add' size={40} color={'red'}/>}
+                            icon={<MaterialIcons style={style.buttons} name='add' size={iconSizes.meddium}/>}
                             onPress={() => increase({name, price})}/>
-                        
 
-                        <Text>{quantity}</Text>
+                        <Text style={style.countText}>{quantity}</Text>
 
-                        <TouchableOpacity style={style.buttonMinus} onPress={() => decrease(name)}>   
-                            <Text> - </Text>
-                        </TouchableOpacity>
-
+                        <ButtonIcon 
+                            text=''
+                            icon={<MaterialIcons style={style.buttons} name='remove' size={iconSizes.meddium}/>}
+                            onPress={() => decrease(name)}/>   
                     </View>
 
                     <Text style={style.description}>
                         {item?.effect_entries?.find((text: any) => text.language.name === 'en')?.effect}
                     </Text>
                 </View>
-            </View>
         </LinearGradient>
     )
 }
@@ -81,14 +79,14 @@ const style = StyleSheet.create({
         justifyContent: 'center',
     },
     imageBox: {
-        backgroundColor: 'white',
+        backgroundColor: colors.white,
         padding: 50,
         borderRadius: 50,
         elevation: 10,
     },
     image: {
         width: 200,
-        height: 200
+        height: 200,
     },
     descriptionBox: {
         alignItems: 'center',
@@ -96,24 +94,32 @@ const style = StyleSheet.create({
     },
     name: {
         fontSize: 30,
-        fontWeight: 'bold',
+        fontWeight: '600',
         marginBottom: 5,
     },
     price: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontWeight: '600',
         color: 'red',
         marginBottom: 15,
     },
-    buttonAdd: {
-
+    countText: {
+        color: colors.white,
+        fontSize: 20,
+        fontWeight: '600',
+        borderWidth: 1,
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        marginVertical: 20,
+        marginHorizontal: 20,
+    },
+    buttons: {
+        color: colors.white,
+        backgroundColor: colors.primary,
+        borderRadius: 5,
     },
     countBox: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-    },
-    buttonMinus: {
-
+        flexDirection: 'row',      
     },
     description: {
         textAlign: 'justify',

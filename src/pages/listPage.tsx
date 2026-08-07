@@ -10,6 +10,8 @@ import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { ButtonIcon } from '../components/ButtonIcon';
 import { CartContext } from '../contexts/CartContext';
+import { colors } from '../themes/colors';
+import { iconSizes } from '../themes/iconSizes';
 
 interface dataProduct {
     name: string;
@@ -20,7 +22,7 @@ interface dataProduct {
 export default function ListPage () {
     const navigation = useNavigation<NavigationProp<any>>();
     const [items, setItems] = useState<dataProduct[]>([]);
-    const { totalItems } = useContext(CartContext)
+    const { totalItems } = useContext(CartContext);
 
     useEffect(() => {
         async function getItems() {
@@ -44,7 +46,7 @@ export default function ListPage () {
         <View style={style.searchBox}>
             <Input
                 placeholder='Pesquise os itens aqui'
-                icon={<MaterialIcons name='search' size={24} color='#a5a3a3'/>}
+                icon={<MaterialIcons name='search' size={iconSizes.meddium} style={style.inputIconStyle}/>}
             />
         </View>
     );
@@ -55,7 +57,7 @@ export default function ListPage () {
             <View style={style.containerHeader}>
                 <ButtonIcon
                     text=''
-                    icon={<MaterialIcons name='arrow-back' size={35} color='white'/>}
+                    icon={<MaterialIcons name='arrow-back' size={iconSizes.meddium} style={style.iconStyle}/>}
                     onPress={() => navigation.navigate('Login')}
                 />
 
@@ -64,7 +66,7 @@ export default function ListPage () {
                 <View style={style.cartBox}>
                     <ButtonIcon
                         text=''
-                        icon={<MaterialIcons name='shopping-cart' size={35} color={'white'}/>}
+                        icon={<MaterialIcons name='shopping-cart' size={iconSizes.meddium} style={style.iconStyle}/>}
                         onPress={() => navigation.navigate('ShoppingCart')}
                     />
                     <Text style={style.iconCount}>{totalItems}</Text>
@@ -97,19 +99,25 @@ const style = StyleSheet.create({
     flex: 1,    
    },
    containerHeader:{
-        backgroundColor: '#c22525',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        marginTop: 40,
-        paddingBottom: 10,
+    backgroundColor: colors.primary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginTop: 40,
+    paddingBottom: 10,
+   },
+   iconStyle: {
+    color: colors.white,
+   },
+   inputIconStyle: {
+    color: colors.inputIcon,
    },
    cartBox:{
-    flexDirection: 'row'
+    flexDirection: 'row',
    },
    iconCount:{
     position: 'absolute',
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
     borderRadius: 100,
     textAlign: 'center',
     paddingHorizontal: 6,
@@ -117,10 +125,10 @@ const style = StyleSheet.create({
     marginTop: 5,
    },
    row: {
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
    },
    list: {
-    padding: 10
+    padding: 10,
    },
    searchBox: {
     marginHorizontal: 20,
