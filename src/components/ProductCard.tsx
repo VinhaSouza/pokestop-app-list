@@ -10,6 +10,7 @@ interface Props {
     image: string;
     price: number;
     onPress: () => void;
+    
 }
 
 export function ProductCard({ name, image, price, onPress }: Props) {
