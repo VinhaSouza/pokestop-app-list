@@ -1,11 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
 import { Header } from '../components/Header'
 import { ButtonIcon } from '../components/ButtonIcon'
 import MaterialIcons from '@react-native-vector-icons/material-icons'
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { CartContext } from '../contexts/CartContext'
+import { FlatList } from 'react-native-gesture-handler'
 
 export default function ShoppingCartPage() {
+        const { cart } = useContext(CartContext); 
+        const totalPrice = cart.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+        )
         const navigation = useNavigation<NavigationProp<any>>()
     return (
         <View style={style.container}>
@@ -19,7 +26,20 @@ export default function ShoppingCartPage() {
                 <Header text='Seu Carrinho'/>
             </View>
             
-            <Text style={style.textBox}>Carrinho aqui!</Text>
+            <FlatList
+                data={cart}
+                keyExtractor={(item) => item.name}
+                renderItem={({item}) => (
+                    <View>
+                        <Text>{item.name}</Text>
+                        <Text>Quantidade: {item.quantity}</Text>
+                        <Text>Preço UN: {item.price}</Text>
+                        <Text>Total: {item.price * item.quantity}</Text>
+                        <Text>Total do carrinho</Text>
+                            <Text>{totalPrice}</Text>
+                    </View>
+                )}
+            />
         </View>
   )
 }
