@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from 'react'
+import React, { createContext, ReactNode, useState } from 'react';
 
 interface CartItem {
     name: string;
@@ -11,6 +11,7 @@ interface CartContextData {
     increase : (product: {name: string, price: number}) => void
     decrease : (name: string) => void
     getQuantity: (name: string) => number;
+    clearCart: () => void;
     totalItems: number;
 }
 
@@ -22,6 +23,10 @@ interface CartProviderProps {
 
 export function CartProvider({children}: CartProviderProps) {
     const [cart, setCart] = useState<CartItem[]>([]);
+    
+    function clearCart() {
+        setCart([]);
+    };
 
     function increase(product: {name: string, price: number}){
         const itemExists = cart.find(item => item.name === product.name);
@@ -74,6 +79,7 @@ export function CartProvider({children}: CartProviderProps) {
     (total, item) => total + item.quantity,
     0
     );
+
     return (
         <CartContext.Provider
             value={{
@@ -81,7 +87,8 @@ export function CartProvider({children}: CartProviderProps) {
                 increase,
                 decrease,
                 getQuantity,
-                totalItems
+                clearCart,
+                totalItems,
             }}
         >
             {children}
