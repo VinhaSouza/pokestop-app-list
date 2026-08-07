@@ -1,4 +1,5 @@
 import { StyleSheet, TextInput, View, TextInputProps } from "react-native";
+import { colors } from "../themes/colors";
 
 type InputProps = TextInputProps & { 
     icon?: React.ReactNode
@@ -21,8 +22,8 @@ const style = StyleSheet.create({
         borderRadius: 40,
         flexDirection: 'row',
         marginTop: 10,
-        borderColor: '#d97c7c',
-        backgroundColor: '#eeeded',
+        borderColor: colors.inputBorder,
+        backgroundColor: colors.inputBackground,
         alignItems: 'center',  
     },
     input: {

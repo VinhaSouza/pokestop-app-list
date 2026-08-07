@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TextProps } from 'react-native';
+import { colors } from '../themes/colors';
 
 type Props = TextProps & {
     text: string,
@@ -16,7 +17,7 @@ const style = StyleSheet.create({
     title: {
         fontSize: 24,
         padding: 10,
-        color: 'white',
+        color: colors.white,
         fontWeight: '900',
         textAlign: 'center',
     }

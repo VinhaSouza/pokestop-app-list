@@ -1,4 +1,5 @@
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacityProps, TouchableOpacity } from 'react-native';
+import { colors } from '../themes/colors';
 
 type Props = TouchableOpacityProps & {
     text:string,
@@ -8,7 +9,6 @@ type Props = TouchableOpacityProps & {
 export function Button({...rest}:Props){
     return(
         <TouchableOpacity
-            style={style.button}
             {...rest}
             activeOpacity={0.6}
         >
@@ -18,25 +18,9 @@ export function Button({...rest}:Props){
 }
 
 const style = StyleSheet.create({
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '80%',
-        height: 60,
-        backgroundColor: '#c22525',
-        borderRadius: 30,
-        shadowColor: "#000",
-        shadowOffset: {
-	        width: 0,
-	        height: 5,
-        },
-        shadowOpacity: 0.34,
-        shadowRadius: 6.27,
-        elevation: 8,   
-    },
     buttonTitle: {
         fontSize: 16,
-        color: 'white',
-        fontWeight: 'bold',
+        color: colors.white,
+        fontWeight: '600',
     }
 })

@@ -4,13 +4,14 @@ import { formatName } from '../utils/formatName';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { ButtonIcon } from './ButtonIcon';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { colors } from '../themes/colors';
+import { iconSizes } from "../themes/iconSizes"
 
 interface Props {
     name: string;
     image: string;
     price: number;
     onPress: () => void;
-    
 }
 
 export function ProductCard({ name, image, price, onPress }: Props) {
@@ -38,7 +39,7 @@ export function ProductCard({ name, image, price, onPress }: Props) {
                     text=''
                     onPress={() => navigation.navigate('ShoppingCart')}
                     icon={
-                        <MaterialIcons style={style.iconBox} name='add-shopping-cart' size={30} color='white'/>
+                        <MaterialIcons style={style.iconBox} name='add-shopping-cart' size={iconSizes.meddium}/>
                     }
                 />
             </View>
@@ -48,7 +49,7 @@ export function ProductCard({ name, image, price, onPress }: Props) {
 
 const style = StyleSheet.create ({
     cardsProcuct: {
-        backgroundColor: '#ffffff',
+        backgroundColor: colors.white,
         width: "48%",
         borderRadius: 10,
         padding: 12,
@@ -74,15 +75,16 @@ const style = StyleSheet.create ({
         paddingLeft: 10,
     },
     priceProduct: {
-        color: '#E53935',
+        color: colors.defaulttext,
         marginTop: 5,
-        fontWeight: 'bold',
+        fontWeight: '600',
         fontSize: 16,
         paddingLeft: 10,
     },
     iconBox:{
         marginHorizontal: 40,
-        backgroundColor: '#c22525',
+        backgroundColor: colors.primary,
+        color: colors.colorIcon,
         borderRadius: 100,
         padding: 12,
     },
