@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { iconSizes } from '../themes/iconSizes';
 import { colors } from '../themes/colors';
+import { backendApi } from '../services/api';
 
 export default function LoginPage() {
 
@@ -17,14 +18,18 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [showPassword, setshowPassword] = useState(false);
 
-    function getLogin(){
-        if(!email || !password) {
-            return Alert.alert("Atenção", "Os campos precisam ser preenchidos!")
-        } 
-        navigation.navigate("HomeRoutes")
-        console.log("Usuário logado!")
-    }
-
+    const getLogin = async () => {
+        try {
+            const response = await backendApi.post("/login", {email, password});
+            
+            console.log("Login realizado:", response.data);
+            
+            navigation.navigate("HomeRoutes");
+        } catch (error) {
+            Alert.alert("Login Inválido", "Email ou senha incorretos!")
+        }
+    };
+    
     return (
     <LinearGradient
         colors={[colors.background, colors.backgroundsec]}
@@ -76,7 +81,7 @@ export default function LoginPage() {
                 </View>
 
                 <View style={style.buttonBox}>
-                    <Button style={style.button} text='ENTRAR' onPress={()=>getLogin()}/>
+                    <Button style={style.button} text='ENTRAR' onPress={getLogin}/>
                 </View>
             </View>
         </ScrollView>
