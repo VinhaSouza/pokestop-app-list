@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import LoginPage from "../pages/LoginPage";
+import LoginPage from "../pages/Loginpage";
 import HomeRoutes from "./home.routes";
 
 export default function Routes() {
