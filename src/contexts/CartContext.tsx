@@ -8,8 +8,8 @@ interface CartItem {
 
 interface CartContextData {
     cart: CartItem[];
-    increase : (product: {name: string, price: number}) => void
-    decrease : (name: string) => void
+    increase : (product: {name: string, price: number}) => void;
+    decrease : (name: string) => void;
     getQuantity: (name: string) => number;
     clearCart: () => void;
     totalItems: number;
