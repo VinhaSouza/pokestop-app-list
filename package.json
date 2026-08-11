@@ -8,7 +8,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "echo \"Sem testes ainda\" && exit 0"
   },
   "dependencies": {
     "@react-native-vector-icons/material-icons": "^13.1.2",
