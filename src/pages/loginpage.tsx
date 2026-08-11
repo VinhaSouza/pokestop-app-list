@@ -18,8 +18,10 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setshowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const getLogin = async () => {
+        setLoading(true);
         //Aqui são validações que o usuário pode corrigir:
         if (!email && !password) {
             Alert.alert("Campos vazios", "Preencha os campos de e-mail e senha para continuar.");
@@ -58,8 +60,10 @@ export default function LoginPage() {
                 return;
             }
            }
-           Alert.alert("Ocorreu um erro ao realizar o login."); // <-- Qualquer outro erro.
-        };
+           Alert.alert("Erro:", "Não foi possível realizar o login."); // <- Qualquer outro erro aqui.
+        } finally {
+            setLoading(false);
+        }
     };
     
     return (
@@ -107,7 +111,7 @@ export default function LoginPage() {
                     </View>
 
                     <View style={style.buttonBox}>
-                        <Button style={style.button} text='ENTRAR' onPress={getLogin}/>
+                        <Button style={style.button} text='ENTRAR' loading={loading} onPress={getLogin}/>
                     </View>
                 </View>
             </ScrollView>
