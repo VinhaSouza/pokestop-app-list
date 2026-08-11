@@ -20,13 +20,8 @@ export default function LoginPage() {
     const [showPassword, setshowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const getLogin = async () => {
-        setLoading(true);
+    const handleLogin = async () => {
         //Aqui são validações que o usuário pode corrigir:
-        if (!email && !password) {
-            Alert.alert("Campos vazios", "Preencha os campos de e-mail e senha para continuar.");
-            return;
-        }
         if (!email.trim()) {
             Alert.alert("E-mail", "Digite seu e-mail.");
             return;
@@ -43,7 +38,7 @@ export default function LoginPage() {
             Alert.alert("Senha inválida", "A senha deve ter pelo menos 6 caracteres.");
             return;
         }
-
+        setLoading(true);
         try {
             await backendApi.post("/login", {email, password}, {timeout: 3000});
 
@@ -111,7 +106,7 @@ export default function LoginPage() {
                     </View>
 
                     <View style={style.buttonBox}>
-                        <Button style={style.button} text='ENTRAR' loading={loading} onPress={getLogin}/>
+                        <Button style={style.button} text='ENTRAR' loading={loading} onPress={handleLogin}/>
                     </View>
                 </View>
             </ScrollView>
