@@ -1,9 +1,12 @@
 import {create} from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const api = create({
-    baseURL: "https://pokeapi.co/api/v2"
+    baseURL: process.env.DB_BASEURL_API
 });
 
 export const backendApi = create({
-    baseURL: "http://10.75.70.100:3000"
+    baseURL: process.env.DB_BASEURL_MYAPI
 });
