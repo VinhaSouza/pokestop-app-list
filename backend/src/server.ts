@@ -25,6 +25,24 @@ app.get("/users", async (req, res) => {
 app.post("/users", async (req, res) => {
     const {name, email, password} = req.body;
 
+    if (typeof name !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
+        return res.status(400).json({error: "Nome, e-mail e senha devem ser textos."});
+    };
+
+    if (!name.trim() || !email.trim() || !password.trim()) {
+        return res.status(400).json({error: "Nome, e-mail e senha são obrigatórios"});
+    };
+
+    const emailRules = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //Expressão regular Regex, significa: começo(^) -> algum texto ([^\s@]) -> + @ -> algum texto ([^\s@]) -> + . -> algum texto [^\s@] -> fim ($)
+
+    if (!emailRules.test(email)) {
+        return res.status(400).json({error: "E-mail inválido."});
+    };
+
+    if (password.length < 6) {
+        return res.status(400).json({error: "A senha deve ter pelo menos 6 caracteres."});
+    };
+
     const userExists = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
     if (userExists.rows.length > 0) {
         return res.status(409).json({message: "Este email já está cadastrado."});
