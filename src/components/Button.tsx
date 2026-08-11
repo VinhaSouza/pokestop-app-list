@@ -16,8 +16,8 @@ export function Button({loading,...rest}:Props){
         >
             {loading ? ( 
                 <View style={style.loading}>
-                <ActivityIndicator size={iconSizes.small}/>
-                <Text style={style.buttonTitle}>Entrando...</Text>    
+                    <ActivityIndicator size={iconSizes.small}/>
+                    <Text style={style.buttonTitle}>Entrando...</Text>    
                 </View>
             ) : 
             (<Text style={style.buttonTitle}>{rest.text}</Text>)}
