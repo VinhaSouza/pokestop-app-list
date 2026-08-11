@@ -14,7 +14,8 @@
                 "refactor",
                 "revert",
                 "style",
-                "test"
+                "test",
+                "build"
             ]
         ]
     }
