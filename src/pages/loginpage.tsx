@@ -9,6 +9,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { iconSizes } from '../themes/iconSizes';
 import { colors } from '../themes/colors';
 import { backendApi } from '../services/api';
+import axios from 'axios';
 
 export default function LoginPage() {
 
@@ -19,15 +20,46 @@ export default function LoginPage() {
     const [showPassword, setshowPassword] = useState(false);
 
     const getLogin = async () => {
+        //Aqui são validações que o usuário pode corrigir:
+        if (!email && !password) {
+            Alert.alert("Campos vazios", "Preencha os campos de e-mail e senha para continuar.");
+            return;
+        }
+        if (!email.trim()) {
+            Alert.alert("E-mail", "Digite seu e-mail.");
+            return;
+        }
+        if (!email.includes("@")) {
+            Alert.alert("E-mail inválido", "Digite um e-mail válido.");
+            return;
+        }
+        if (!password) {
+            Alert.alert("Senha", "Digite sua senha.")
+            return;
+        }
+        if (password.length < 6) {
+            Alert.alert("Senha inválida", "A senha deve ter pelo menos 6 caracteres.");
+            return;
+        }
+
         try {
-            const response = await backendApi.post("/login", {email, password});
-            
-            console.log("Login realizado:", response.data);
-            
+            await backendApi.post("/login", {email, password}, {timeout: 3000});
+
             navigation.navigate("HomeRoutes");
         } catch (error) {
-            Alert.alert("Login Inválido", "Email ou senha incorretos!")
-        }
+            //Aqui são erros de conexão:
+           if (axios.isAxiosError(error)) {
+            if (!error.response) {
+                Alert.alert("Erro de conexão", "Não foi possível conectar à API."); // <-- A distinção de qual erro pode ser ainda não está garantida aqui.  
+                return;
+            }
+            if (error.response.status === 401) {
+                Alert.alert("Login inválido", "E-mail ou senha incorretos.");
+                return;
+            }
+           }
+           Alert.alert("Ocorreu um erro ao realizar o login."); // <-- Qualquer outro erro.
+        };
     };
     
     return (
@@ -35,58 +67,52 @@ export default function LoginPage() {
         colors={[colors.background, colors.backgroundsec]}
         start={{x: 0.85, y: 0.85}}
         end={{x: 0.15, y: 0.15}}
-        style={style.container}
-    >
-    <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-        <ScrollView style={style.scrollContainer}>
-            <View style={style.viewContainer}>
-                <View style={style.logoBox}>
-                    <Image
-                        source={Logo}
-                        style={style.logo}
-                        resizeMode='contain'
-                    />
+        style={style.container}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <ScrollView style={style.scrollContainer}>
+                <View style={style.viewContainer}>
+                    <View style={style.logoBox}>
+                        <Image
+                            source={Logo}
+                            style={style.logo}
+                            resizeMode='contain'
+                        />
+                        
+                        <Text style={style.title}>Bem-vindo de Volta, {"\n"} Treinador(a)!</Text>
+                    </View>
+
+                    <View style={style.inputBox}>
+                        <Text style={style.titleInput}>ENDEREÇO DE E-MAIL</Text>
+                        
+                        <Input 
+                            keyboardType='email-address'
+                            value={email}
+                            onChangeText={setEmail} 
+                            icon={<MaterialIcons name='email' style={style.inputIconStyle} size={iconSizes.meddium}/>}
+                        />
                     
-                    <Text style={style.title}>Bem-vindo de Volta, {"\n"} Treinador(a)!</Text>
-                </View>
+                        <Text style={style.titleInput}>SENHA</Text>
 
-                <View style={style.inputBox}>
-                    <Text style={style.titleInput}>ENDEREÇO DE E-MAIL</Text>
-                    
-                    <Input 
-                        keyboardType='email-address'
-                        value={email}
-                        onChangeText={setEmail} 
-                        icon={<MaterialIcons name='email' style={style.inputIconStyle} size={iconSizes.meddium}/>
-                        }
-                    />
-                  
-                    <Text style={style.titleInput}>SENHA</Text>
+                        <Input 
+                            keyboardType='default'
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry={!showPassword}
+                            icon={
+                                <TouchableOpacity onPress={() => setshowPassword(!showPassword)}>
+                                    <MaterialIcons name={showPassword? 'visibility' : 'visibility-off'} style={style.inputIconStyle} size={iconSizes.meddium}/>  
+                                </TouchableOpacity>
+                            }
+                        />
+                    </View>
 
-                    <Input 
-                        keyboardType='default'
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry={!showPassword}
-                        icon={
-                            <TouchableOpacity
-                                onPress={() => setshowPassword(!showPassword)}
-                            >
-                            <MaterialIcons name={showPassword? 'visibility' : 'visibility-off'} style={style.inputIconStyle} size={iconSizes.meddium}/>  
-                            </TouchableOpacity>
-                        }
-                    />
+                    <View style={style.buttonBox}>
+                        <Button style={style.button} text='ENTRAR' onPress={getLogin}/>
+                    </View>
                 </View>
-
-                <View style={style.buttonBox}>
-                    <Button style={style.button} text='ENTRAR' onPress={getLogin}/>
-                </View>
-            </View>
-        </ScrollView>
-    </KeyboardAvoidingView>
-                </LinearGradient>
+            </ScrollView>
+        </KeyboardAvoidingView>
+    </LinearGradient>
     )
 }
 
