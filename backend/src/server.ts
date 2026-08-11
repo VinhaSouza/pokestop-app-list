@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 import pool from "./db";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 
 app.use(cors());
@@ -15,7 +17,7 @@ app.get("/", (req, res) => {
 app.get("/users", async (req, res) => {
     console.log("ROTA users foi chamada");
 
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query("SELECT id, name, email FROM users");
         
     res.json(result.rows);
 });
@@ -37,7 +39,7 @@ app.post("/users", async (req, res) => {
 app.post("/login", async (req, res) => {
     const {email, password} = req.body;
 
-    const result = await pool.query("SELECT id AS id, name AS name, email AS email, password AS password FROM users WHERE email = $1", [email]);
+    const result = await pool.query("SELECT id, name, email, password FROM users WHERE email = $1", [email]);
 
     if (result.rows.length === 0) {
         return res.status(401).json({message: "Email ou senha incorretos",});
@@ -61,6 +63,6 @@ app.post("/login", async (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log("API funcionando na porta 3000!");
+app.listen(process.env.DB_PORTBACKEND, () => {
+    console.log("A API está rodando com sucesso!");
 });
