@@ -1,10 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
-import { api } from '../services/api';
+import React, { useContext } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { Header } from '../components/Header';
 import { ProductCard } from '../components/ProductCard';
-import { prices } from '../data/prices';
-import { storeItems } from '../data/storeItems';
 import { Input } from '../components/Input';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
@@ -12,36 +9,13 @@ import { ButtonIcon } from '../components/ButtonIcon';
 import { CartContext } from '../contexts/CartContext';
 import { colors } from '../themes/colors';
 import { iconSizes } from '../themes/iconSizes';
-
-interface dataProduct {
-    name: string;
-    image: string;
-    price: number;
-}
+import { ProductsContext } from '../contexts/ProductsContext';
 
 export default function ListPage () {
     const navigation = useNavigation<NavigationProp<any>>();
-    const [items, setItems] = useState<dataProduct[]>([]);
     const { totalItems } = useContext(CartContext);
+    const { products, loading } = useContext(ProductsContext);
 
-    useEffect(() => {
-        async function getItems() {
-            const products: dataProduct[] = [];
-                for (const itemName of storeItems) {
-                    const response = await api.get(`/item/${itemName}`);
-
-                    products.push({
-                        name: response.data.name,
-                        image: response.data.sprites.default,
-                        price: prices[itemName],
-                    });
-                }
-                setItems(products);  
-                console.log("Produtos Carregados!");
-        }
-        getItems();
-    },[]);
-    
     const RenderInputHeader = () => (
         <View style={style.searchBox}>
             <Input
@@ -50,7 +24,6 @@ export default function ListPage () {
             />
         </View>
     );
-
 
     return (
         <View style={style.container}>
@@ -73,9 +46,8 @@ export default function ListPage () {
                 </View>
             </View>
 
-
             <FlatList
-                data={items}
+                data={products}
                 numColumns={2}
                 keyExtractor={(item) => item.name}
                 columnWrapperStyle={style.row} // Aplica um estilo em cada linha da lista.
@@ -91,9 +63,9 @@ export default function ListPage () {
                 ListHeaderComponent={RenderInputHeader}
             />
         </View>  
-   )
+    );
 }
-   
+
 const style = StyleSheet.create({
    container: {
     flex: 1,    
