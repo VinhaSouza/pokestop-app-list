@@ -21,7 +21,7 @@ export default function LoginPage() {
 
     const handleLogin = async () => {
         const validation = validateLogin(email, password)
-            if (validation.type) { // Aqui é o "", o if entende como "false" e não dispara o Alert
+            if (validation.type) { // Aqui é o "", o if entende como "false" e não dispara o
                 Alert.alert(validation.type, validation.message);
             return;
         }
@@ -32,18 +32,18 @@ export default function LoginPage() {
 
             navigation.navigate("HomeRoutes");
         } catch (error) {
-           if (axios.isAxiosError(error)) {
-            if (!error.response) {
-                Alert.alert("Erro de conexão", "Não foi possível conectar à API."); // <-- A distinção de qual erro pode ser ainda não está garantida aqui.  
-                return;
-            }
-            if (error.response.status === 401) {
-                Alert.alert("Login inválido", "E-mail ou senha incorretos.");
-                return;
-            }
-           }
+                if (axios.isAxiosError(error)) {
+                    if (!error.response) {
+                        Alert.alert("Erro de conexão", "Não foi possível conectar à API."); // <-- A distinção de qual erro pode ser ainda não está garantida aqui.  
+                        return;
+                    }
+                    if (error.response.status === 401) {
+                        Alert.alert("Login inválido", "E-mail ou senha incorretos.");
+                        return;
+                    }
+                }
 
-           Alert.alert("Erro:", "Não foi possível realizar o login."); // <- Qualquer outro erro aqui.
+            Alert.alert("Erro:", "Não foi possível realizar o login."); // <- Qualquer outro erro aqui.
         
         } finally {
             setLoading(false);
