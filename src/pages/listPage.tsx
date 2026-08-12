@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { StyleSheet, View, FlatList, Text, ActivityIndicator } from 'react-native';
 import { Header } from '../components/Header';
 import { ProductCard } from '../components/ProductCard';
 import { Input } from '../components/Input';
@@ -46,22 +46,29 @@ export default function ListPage () {
                 </View>
             </View>
 
-            <FlatList
-                data={products}
-                numColumns={2}
-                keyExtractor={(item) => item.name}
-                columnWrapperStyle={style.row} // Aplica um estilo em cada linha da lista.
-                contentContainerStyle={style.list} // Aplica um estilo ao conteudo inteiro da lista.
-                renderItem={({item}) => (
-                    <ProductCard
-                        name={item.name}
-                        image={item.image}
-                        price={item.price} 
-                        onPress={() => navigation.navigate('ProductDetail', {name: item.name, price: item.price, image: item.image})}
-                    />
-                )}
-                ListHeaderComponent={RenderInputHeader}
-            />
+            {loading ? (
+                <View style={style.loading}>
+                    <ActivityIndicator size={iconSizes.meddium}/>
+                    <Text style={style.loadingTitle}>Carregando Produtos...</Text>
+                </View>
+            ) : (
+                <FlatList
+                    data={products}
+                    numColumns={2}
+                    keyExtractor={(item) => item.name}
+                    columnWrapperStyle={style.row} // Aplica um estilo em cada linha da lista.
+                    contentContainerStyle={style.list} // Aplica um estilo ao conteudo inteiro da lista.
+                    renderItem={({item}) => (
+                        <ProductCard
+                            name={item.name}
+                            image={item.image}
+                            price={item.price} 
+                            onPress={() => navigation.navigate('ProductDetail', {name: item.name, price: item.price, image: item.image})}
+                        />
+                    )}
+                    ListHeaderComponent={RenderInputHeader}
+                />
+            )}
         </View>  
     );
 }
@@ -106,5 +113,14 @@ const style = StyleSheet.create({
     marginHorizontal: 20,
     width: '90%',
     paddingBottom: 20,
+   },
+   loading: {
+    alignItems: 'center',
+    paddingVertical: "80%",
+   },
+   loadingTitle: {
+    fontSize: 24,
+    color: colors.secondary,
+    fontWeight: 600,
    },
 })
