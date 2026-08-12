@@ -4,6 +4,7 @@ import ListPage from "../pages/ListPage";
 import ProductDetailPage from "../pages/ProductDetailPage";
 import { RootStackParamList } from "../@types/routes";
 import ShoppingCartPage from "../pages/ShoppingCartPage";
+import { ProductsProvider } from "../contexts/ProductsContext";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -17,10 +18,13 @@ export default function HomeRoutes() {
                 }
             }}
         >
-            <Stack.Screen
-                name="List"
-                component={ListPage}
-            />
+            <Stack.Screen name="List">
+                {() => (
+                    <ProductsProvider>
+                        <ListPage/>
+                    </ProductsProvider>
+                )}
+            </Stack.Screen>
 
             <Stack.Screen
                 name="ProductDetail"
