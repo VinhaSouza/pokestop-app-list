@@ -1,21 +1,33 @@
-import { Alert } from "react-native";
-
 export const validateLogin = (email: string, password: string) => {
+    let emailError = false; //<- Cada validação tem sua própria variável para uma não substituir a outra.
+    let passwordError = false; // Começam sem saber se tem um erro.
+    let invalidEmail = false;
+    let invalidPassword = false;
+
     if (!email.trim()) {
-        Alert.alert("E-mail", "Digite seu e-mail.");
-        return false;
-    };
-    if (!email.includes("@")) {
-        Alert.alert("E-mail inválido", "Digite um e-mail válido.");
-        return false;
-    };
-    if (!password) {
-        Alert.alert("Senha", "Digite sua senha.")
-        return false;
-    };
-    if (password.length < 6) {
-        Alert.alert("Senha inválida", "A senha deve ter pelo menos 6 caracteres.");
-        return false;
+        emailError = true;
     }
-    return true;
-};
+    if (!email.includes("@")) {
+        invalidEmail = true;
+    }
+    if (!password) {
+       passwordError = true;
+    }
+    if (password.length < 6) {
+        invalidPassword = true;
+    }
+    return {
+        type: // condição ? resultadoSeVerdadeiro : resultadoSeFalso
+            emailError ? "E-mail" : 
+            passwordError ? "Senha" :
+            invalidEmail ? "E-mail inválido" :
+            invalidPassword ? "Senha inválida" : 
+            "", // Significa que não tem erro
+        message: 
+           emailError ? "Digite seu E-mail." : 
+           passwordError ? "Digite sua senha." :
+           invalidEmail ? "Digite um e-mail válido." :
+           invalidPassword ? "A senha deve conter no mínimo 6 caracteres." :
+           "", // Significa que não tem erro
+        }
+    };
