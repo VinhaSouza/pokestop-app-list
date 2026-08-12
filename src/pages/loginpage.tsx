@@ -10,55 +10,42 @@ import { iconSizes } from '../themes/iconSizes';
 import { colors } from '../themes/colors';
 import { backendApi } from '../services/api';
 import axios from 'axios';
+import { validateLogin } from '../utils/loginValidation';
 
 export default function LoginPage() {
-
     const navigation = useNavigation<NavigationProp<any>>();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setshowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const handleLogin = async () => {
-        //Aqui são validações que o usuário pode corrigir:
-        if (!email.trim()) {
-            Alert.alert("E-mail", "Digite seu e-mail.");
+        if (!validateLogin(email, password)) {
             return;
-        }
-        if (!email.includes("@")) {
-            Alert.alert("E-mail inválido", "Digite um e-mail válido.");
-            return;
-        }
-        if (!password) {
-            Alert.alert("Senha", "Digite sua senha.")
-            return;
-        }
-        if (password.length < 6) {
-            Alert.alert("Senha inválida", "A senha deve ter pelo menos 6 caracteres.");
-            return;
-        }
+        };
         setLoading(true);
+        
         try {
             await backendApi.post("/login", {email, password}, {timeout: 3000});
 
             navigation.navigate("HomeRoutes");
         } catch (error) {
-            //Aqui são erros de conexão:
            if (axios.isAxiosError(error)) {
             if (!error.response) {
                 Alert.alert("Erro de conexão", "Não foi possível conectar à API."); // <-- A distinção de qual erro pode ser ainda não está garantida aqui.  
                 return;
-            }
+            };
             if (error.response.status === 401) {
                 Alert.alert("Login inválido", "E-mail ou senha incorretos.");
                 return;
-            }
-           }
+            };
+           };
+
            Alert.alert("Erro:", "Não foi possível realizar o login."); // <- Qualquer outro erro aqui.
+        
         } finally {
             setLoading(false);
-        }
+        };
     };
     
     return (
@@ -112,8 +99,8 @@ export default function LoginPage() {
             </ScrollView>
         </KeyboardAvoidingView>
     </LinearGradient>
-    )
-}
+    );
+};
 
 const style = StyleSheet.create({
     container: {
