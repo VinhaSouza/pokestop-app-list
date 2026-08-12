@@ -45,12 +45,14 @@ export function ProductsProvider ({children}:ProductsProviderProps) {
                     if (storedProducts) {
                         const productsFromStorage: DataProduct[] = JSON.parse(storedProducts);
 
+                        await new Promise (resolve => setTimeout(resolve, 3000)); // <- Adicionado apenas para testar visualmente o loading. (não é necessário)
+
                         console.log("3 - Produtos carregados do STORAGE", productsFromStorage.length);
 
                         setProducts(productsFromStorage);
 
                         return;
-                    };
+                    }
 
                 //3 - Se não encontrou, busca na PokeAPI
                     const productsFromApi: DataProduct[] = [];
@@ -69,7 +71,7 @@ export function ProductsProvider ({children}:ProductsProviderProps) {
                                 image: response.data.sprites.default,
                                 price: prices[itemName],
                             });
-                        };
+                        }
 
                 //4 - Coloca os produtos no Storage
                     setProducts(productsFromApi);
@@ -80,15 +82,14 @@ export function ProductsProvider ({children}:ProductsProviderProps) {
                     console.log("5 - Produtos salvos no STORAGE", productsFromApi.length);
 
                 } catch (error) {
-                    console.log("Error ao carregar os produtos.", error)
+                    console.log("Error ao carregar os produtos.", error);
                 } finally {
-                    setLoading(false)
+                    setLoading(false);
                 }
         };
 
         loadProducts();
     }, []);
-
 
     return (
         <ProductsContext.Provider
