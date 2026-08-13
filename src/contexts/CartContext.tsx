@@ -8,8 +8,8 @@ interface CartItem {
 
 interface CartContextData {
     cart: CartItem[];
-    increase : (product: {name: string, price: number}) => void;
-    decrease : (name: string) => void;
+    increase: (product: { name: string; price: number }) => void;
+    decrease: (name: string) => void;
     getQuantity: (name: string) => number;
     clearCart: () => void;
     totalItems: number;
@@ -21,24 +21,26 @@ interface CartProviderProps {
     children: ReactNode;
 }
 
-export function CartProvider({children}: CartProviderProps) {
+export function CartProvider({ children }: CartProviderProps) {
     const [cart, setCart] = useState<CartItem[]>([]);
-    
+
     function clearCart() {
         setCart([]);
-    };
+    }
 
-    function increase(product: {name: string, price: number}){
-        const itemExists = cart.find(item => item.name === product.name);
+    function increase(product: { name: string; price: number }) {
+        const itemExists = cart.find((item) => item.name === product.name);
         if (itemExists) {
-            setCart(cart.map(item =>
-                item.name === product.name
-                ? {
-                    ...item,
-                    quantity: item.quantity + 1
-                } 
-                : item
-            ));
+            setCart(
+                cart.map((item) =>
+                    item.name === product.name
+                        ? {
+                              ...item,
+                              quantity: item.quantity + 1,
+                          }
+                        : item,
+                ),
+            );
 
             return;
         }
@@ -47,38 +49,35 @@ export function CartProvider({children}: CartProviderProps) {
             {
                 name: product.name,
                 price: product.price,
-                quantity: 1
-            }
+                quantity: 1,
+            },
         ]);
     }
     function decrease(name: string) {
-        const itemExists = cart.find(item => item.name === name);
+        const itemExists = cart.find((item) => item.name === name);
         if (!itemExists) {
             return;
         }
         if (itemExists.quantity === 1) {
-            setCart(cart.filter(item => item.name !== name));
+            setCart(cart.filter((item) => item.name !== name));
             return;
         }
         setCart(
-            cart.map(item =>
+            cart.map((item) =>
                 item.name === name
-                ? {
-                    ...item,
-                    quantity: item.quantity - 1
-                }
-                : item
-            )
+                    ? {
+                          ...item,
+                          quantity: item.quantity - 1,
+                      }
+                    : item,
+            ),
         );
     }
     function getQuantity(name: string) {
-        const item = cart.find(item => item.name === name);
-        return item? item.quantity: 0;
+        const item = cart.find((item) => item.name === name);
+        return item ? item.quantity : 0;
     }
-    const totalItems = cart.reduce(
-    (total, item) => total + item.quantity,
-    0
-    );
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
     return (
         <CartContext.Provider
@@ -89,9 +88,8 @@ export function CartProvider({children}: CartProviderProps) {
                 getQuantity,
                 clearCart,
                 totalItems,
-            }}
-        >
+            }}>
             {children}
         </CartContext.Provider>
-    )
+    );
 }

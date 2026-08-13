@@ -4,12 +4,11 @@ import Routes from './src/routes/index.routes';
 import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
-  return (
-    <CartProvider>  
-      <NavigationContainer>
-        <Routes/>
-      </NavigationContainer>
-    </CartProvider>
-  );
+    return (
+        <CartProvider>
+            <NavigationContainer>
+                <Routes />
+            </NavigationContainer>
+        </CartProvider>
+    );
 }
-

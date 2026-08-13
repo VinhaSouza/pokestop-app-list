@@ -1,8 +1,8 @@
-import express from "express";
-import cors from "cors";
-import pool from "./db";
-import bcrypt from "bcrypt";
-import dotenv from "dotenv";
+import express from 'express';
+import cors from 'cors';
+import pool from './db';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 
 dotenv.config();
 const app = express();
@@ -10,69 +10,75 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.json({message: "A api está funcionando!!"});
+app.get('/', (req, res) => {
+    res.json({ message: 'A api está funcionando!!' });
 });
 
-app.get("/users", async (req, res) => {
-    console.log("ROTA users foi chamada");
+app.get('/users', async (req, res) => {
+    console.log('ROTA users foi chamada');
 
-    const result = await pool.query("SELECT id, name, email FROM users");
-        
+    const result = await pool.query('SELECT id, name, email FROM users');
+
     res.json(result.rows);
 });
 
-app.post("/users", async (req, res) => {
-    const {name, email, password} = req.body;
+app.post('/users', async (req, res) => {
+    const { name, email, password } = req.body;
 
     if (typeof name !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
-        return res.status(400).json({error: "Nome, e-mail e senha devem ser textos."});
-    };
+        return res.status(400).json({ error: 'Nome, e-mail e senha devem ser textos.' });
+    }
 
     if (!name.trim() || !email.trim() || !password.trim()) {
-        return res.status(400).json({error: "Nome, e-mail e senha são obrigatórios"});
-    };
+        return res.status(400).json({ error: 'Nome, e-mail e senha são obrigatórios' });
+    }
 
     const emailRules = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //Expressão regular Regex, significa: começo(^) -> algum texto ([^\s@]) -> + @ -> algum texto ([^\s@]) -> + . -> algum texto [^\s@] -> fim ($)
 
     if (!emailRules.test(email)) {
-        return res.status(400).json({error: "E-mail inválido."});
-    };
+        return res.status(400).json({ error: 'E-mail inválido.' });
+    }
 
     if (password.length < 6) {
-        return res.status(400).json({error: "A senha deve ter pelo menos 6 caracteres."});
-    };
+        return res.status(400).json({ error: 'A senha deve ter pelo menos 6 caracteres.' });
+    }
 
-    const userExists = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
+    const userExists = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
     if (userExists.rows.length > 0) {
-        return res.status(409).json({message: "Este email já está cadastrado."});
-    };
+        return res.status(409).json({ message: 'Este email já está cadastrado.' });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    
-    const result = await pool.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email", [name, email, hashedPassword]);
+
+    const result = await pool.query(
+        'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email',
+        [name, email, hashedPassword],
+    );
     res.status(201).json(result.rows[0]);
 });
 
-app.post("/login", async (req, res) => {
-    const {email, password} = req.body;
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
 
-    const result = await pool.query("SELECT id, name, email, password FROM users WHERE email = $1", [email]);
+    const result = await pool.query(
+        'SELECT id, name, email, password FROM users WHERE email = $1',
+        [email],
+    );
 
     if (result.rows.length === 0) {
-        return res.status(401).json({message: "Email ou senha incorretos",});
-    };
+        return res.status(401).json({ message: 'Email ou senha incorretos' });
+    }
 
     const user = result.rows[0];
 
     const passwordCorret = await bcrypt.compare(password, user.password);
 
     if (!passwordCorret) {
-        return res.status(401).json({message: "Email ou senha incorretos",});
-    };
+        return res.status(401).json({ message: 'Email ou senha incorretos' });
+    }
 
     res.json({
-        message: "Login realizado com sucesso!",
+        message: 'Login realizado com sucesso!',
         user: {
             id: user.id,
             name: user.name,
@@ -81,5 +87,5 @@ app.post("/login", async (req, res) => {
 });
 
 app.listen(process.env.DB_PORTBACKEND, () => {
-    console.log("A API está rodando com sucesso!");
+    console.log('A API está rodando com sucesso!');
 });

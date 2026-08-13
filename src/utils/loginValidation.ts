@@ -7,27 +7,34 @@ export const validateLogin = (email: string, password: string) => {
     if (!email.trim()) {
         emailError = true;
     }
-    if (!email.includes("@")) {
+    if (!email.includes('@')) {
         invalidEmail = true;
     }
     if (!password) {
-       passwordError = true;
+        passwordError = true;
     }
     if (password.length < 6) {
         invalidPassword = true;
     }
     return {
-        type: // condição ? resultadoSeVerdadeiro : resultadoSeFalso
-            emailError ? "E-mail" : 
-            passwordError ? "Senha" :
-            invalidEmail ? "E-mail inválido" :
-            invalidPassword ? "Senha inválida" : 
-            "", // Significa que não tem erro
-        message: 
-           emailError ? "Digite seu E-mail." : 
-           passwordError ? "Digite sua senha." :
-           invalidEmail ? "Digite um e-mail válido." :
-           invalidPassword ? "A senha deve conter no mínimo 6 caracteres." :
-           "", // Significa que não tem erro
-        }
+        // condição ? resultadoSeVerdadeiro : resultadoSeFalso
+        type: emailError
+            ? 'E-mail'
+            : passwordError
+              ? 'Senha'
+              : invalidEmail
+                ? 'E-mail inválido'
+                : invalidPassword
+                  ? 'Senha inválida'
+                  : '', // Significa que não tem erro
+        message: emailError
+            ? 'Digite seu E-mail.'
+            : passwordError
+              ? 'Digite sua senha.'
+              : invalidEmail
+                ? 'Digite um e-mail válido.'
+                : invalidPassword
+                  ? 'A senha deve conter no mínimo 6 caracteres.'
+                  : '', // Significa que não tem erro
     };
+};

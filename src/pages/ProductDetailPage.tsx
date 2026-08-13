@@ -11,8 +11,7 @@ import MaterialIcons from '@react-native-vector-icons/material-icons';
 import { colors } from '../themes/colors';
 import { iconSizes } from '../themes/iconSizes';
 
-
-export default function ProductDetailPage () {
+export default function ProductDetailPage() {
     //const navigation = useNavigation<NavigationProp<any>>() //Será utilizado futuramente
     const route = useRoute<RouteProp<RootStackParamList, 'ProductDetail'>>();
     const { name } = route.params;
@@ -24,56 +23,66 @@ export default function ProductDetailPage () {
 
     async function getItems() {
         const response = await api.get(`/item/${name}`);
-        setItem(response.data)
+        setItem(response.data);
     }
     useEffect(() => {
         getItems();
-    },)
+    });
 
     return (
-         <LinearGradient
-                colors={[colors.lightBackground, colors.lightBackgroundSec]}
-                start={{x: 0.85, y: 0.85}}
-                end={{x: 0.15, y: 0.15}}
-                style={style.container}
-            >
-                <View style={style.imageBox}>
-                    <Image
-                        source={{uri: image}}
-                        style={style.image}
+        <LinearGradient
+            colors={[colors.lightBackground, colors.lightBackgroundSec]}
+            start={{ x: 0.85, y: 0.85 }}
+            end={{ x: 0.15, y: 0.15 }}
+            style={style.container}>
+            <View style={style.imageBox}>
+                <Image source={{ uri: image }} style={style.image} />
+            </View>
+
+            <View style={style.descriptionBox}>
+                <Text style={style.name}>{formatName(name)}</Text>
+
+                <Text style={style.price}> G {price}</Text>
+
+                <Text>Adicionar ao Carrinho</Text>
+                <View style={style.countBox}>
+                    <ButtonIcon
+                        text=""
+                        icon={
+                            <MaterialIcons
+                                style={style.buttons}
+                                name="add"
+                                size={iconSizes.meddium}
+                            />
+                        }
+                        onPress={() => increase({ name, price })}
+                    />
+
+                    <Text style={style.countText}>{quantity}</Text>
+
+                    <ButtonIcon
+                        text=""
+                        icon={
+                            <MaterialIcons
+                                style={style.buttons}
+                                name="remove"
+                                size={iconSizes.meddium}
+                            />
+                        }
+                        onPress={() => decrease(name)}
                     />
                 </View>
 
-                <View style={style.descriptionBox}>
-                    <Text style={style.name}>{formatName(name)}</Text>
-            
-                    <Text style={style.price}> G {price}</Text>
-
-                        <Text>Adicionar ao Carrinho</Text>
-                    <View style={style.countBox}>
-                        <ButtonIcon     
-                            text=''
-                            icon={<MaterialIcons style={style.buttons} name='add' size={iconSizes.meddium}/>}
-                            onPress={() => increase({name, price})}/>
-
-                        <Text style={style.countText}>{quantity}</Text>
-
-                        <ButtonIcon 
-                            text=''
-                            icon={<MaterialIcons style={style.buttons} name='remove' size={iconSizes.meddium}/>}
-                            onPress={() => decrease(name)}/>   
-                    </View>
-
-                    <Text style={style.description}>
-                        {item?.effect_entries?.find((text: any) => text.language.name === 'en')?.effect}
-                    </Text>
-                </View>
+                <Text style={style.description}>
+                    {item?.effect_entries?.find((text: any) => text.language.name === 'en')?.effect}
+                </Text>
+            </View>
         </LinearGradient>
-    )
+    );
 }
 
 const style = StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
@@ -119,13 +128,13 @@ const style = StyleSheet.create({
         borderRadius: 5,
     },
     countBox: {
-        flexDirection: 'row',      
+        flexDirection: 'row',
     },
     description: {
         textAlign: 'justify',
-        fontSize:20,
+        fontSize: 20,
         fontStyle: 'italic',
         paddingHorizontal: 20,
         paddingVertical: 20,
     },
-})
+});

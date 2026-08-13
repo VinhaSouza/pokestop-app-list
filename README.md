@@ -20,9 +20,11 @@
 ## 📱 Preview
 
 ---
+
 ## ✨ Funcionalidades
 
 ---
+
 ## 💻 Tecnologias
 
 - React Native
@@ -34,23 +36,26 @@
 - ...
 
 ---
+
 ## 🚀 Como executar
 
 1. Clone o projeto
-   > git clone url
+    > git clone url
 2. Entre na pasta
-   > cd pokestop-app-list
+    > cd pokestop-app-list
 3. Instale as dependências
-   > npm install
+    > npm install
 4. Execute
-   > npx expo start
+    > npx expo start
 
 ---
+
 ## 📜 Produtos Digitais Disponíveis
 
 ---
+
 ## 📚 Objetivos
 
 ---
-Desenvolvido por 🎀<a href="https://github.com/VinhaSouza">Flavia (Vinha) Souza</a>
 
+Desenvolvido por 🎀<a href="https://github.com/VinhaSouza">Flavia (Vinha) Souza</a>

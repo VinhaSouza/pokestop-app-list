@@ -2,15 +2,11 @@ import { StyleSheet, Text, TextProps } from 'react-native';
 import { colors } from '../themes/colors';
 
 type Props = TextProps & {
-    text: string,
-}
+    text: string;
+};
 
-export function Header({...rest}: Props) {
-    return (
-            <Text style={style.title} >
-                {rest.text}
-            </Text> 
-    )
+export function Header({ ...rest }: Props) {
+    return <Text style={style.title}>{rest.text}</Text>;
 }
 
 const style = StyleSheet.create({
@@ -20,5 +16,5 @@ const style = StyleSheet.create({
         color: colors.white,
         fontWeight: '900',
         textAlign: 'center',
-    }
-})
+    },
+});

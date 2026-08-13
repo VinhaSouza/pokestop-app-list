@@ -1,19 +1,19 @@
-import { StyleSheet, TextInput, View, TextInputProps } from "react-native";
-import { colors } from "../themes/colors";
+import { StyleSheet, TextInput, View, TextInputProps } from 'react-native';
+import { colors } from '../themes/colors';
 
-type InputProps = TextInputProps & { 
-    icon?: React.ReactNode
-}
+type InputProps = TextInputProps & {
+    icon?: React.ReactNode;
+};
 
-export function Input({icon, ...rest}: InputProps){
-    return(
+export function Input({ icon, ...rest }: InputProps) {
+    return (
         <View style={style.formBox}>
-            <TextInput style={style.input} {...rest}/>
+            <TextInput style={style.input} {...rest} />
             {icon}
         </View>
-    )
+    );
 }
-    
+
 const style = StyleSheet.create({
     formBox: {
         width: '100%',
@@ -24,11 +24,11 @@ const style = StyleSheet.create({
         marginTop: 10,
         borderColor: colors.inputBorder,
         backgroundColor: colors.inputBackground,
-        alignItems: 'center',  
+        alignItems: 'center',
     },
     input: {
-        width:'85%',
+        width: '85%',
         height: '100%',
         paddingHorizontal: 20,
     },
-})
+});
