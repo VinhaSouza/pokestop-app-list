@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView, ScrollView, Dimensions, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, ScrollView, Dimensions, TouchableOpacity, Alert } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from "../themes/colors";
 import { iconSizes } from "../themes/iconSizes";
@@ -8,6 +8,8 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { Input } from "../components/Input";
 import { useState } from "react";
 import { Button } from "../components/Button";
+import { backendApi } from '../services/api';
+import { validateRegister } from "../utils/registerValidation";
 
 export default function RegisterPage () {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -15,6 +17,22 @@ export default function RegisterPage () {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setshowPassword] = useState(false);
+
+    const handleResgiter = async () => {
+        const validation = validateRegister(name, email, password)
+            if (validation.type) {
+                Alert.alert(validation.type, validation.message);
+                return;
+            }
+
+        try {
+            await backendApi.post("/users", {name, email, password});
+            navigation.navigate("Login");
+            console.log("Usuário cadastrado com sucesso");
+        } catch (error) {
+            Alert.alert("Erro:", "Erro ao realizar o cadastro, tente novamente.")
+        }
+    }
 
     return (
     <LinearGradient
@@ -72,7 +90,7 @@ export default function RegisterPage () {
                     </View>
 
                     <View style={style.buttonBox}>
-                        <Button style={style.button} text='REGISTRAR' onPress={() => navigation.navigate('Login')}/>
+                        <Button style={style.button} text='REGISTRAR' onPress={handleResgiter}/>
                     </View>
                 </View>
             </ScrollView>
