@@ -15,7 +15,8 @@
                 "revert",
                 "style",
                 "test",
-                "build"
+                "build",
+                "remove"
             ]
         ]
     }
