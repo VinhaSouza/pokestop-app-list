@@ -97,6 +97,13 @@ export default function LoginPage() {
                     <View style={style.buttonBox}>
                         <Button style={style.button} text='ENTRAR' loading={loading} onPress={handleLogin}/>
                     </View>
+
+                    <View style={style.footerBox}>
+                        <Text style={style.textReg}>Não tem uma conta?</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                            <Text style={style.signupText}>Cadastre-se aqui!</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -127,10 +134,6 @@ const style = StyleSheet.create({
        height: Dimensions.get('window').height/4,
        alignItems: 'flex-start',
        paddingHorizontal: 37,
-    },
-    formBox: {
-        flexDirection: 'row',
-        alignItems: 'center',
     },
     button: {
         alignItems: 'center',
@@ -173,4 +176,17 @@ const style = StyleSheet.create({
     inputIconStyle: {
         color: colors.inputIcon,
     },
+    footerBox:{
+        flexDirection: 'row',
+    },
+    signupText: {
+        color: colors.defaulttext,
+        fontWeight: 600,
+        fontSize: 16,
+    },
+    textReg: {
+        fontSize: 16,
+        fontWeight: 600,
+        color: colors.white,
+    }
 })
