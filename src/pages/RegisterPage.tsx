@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { Button } from '../components/Button';
 import { backendApi } from '../services/api';
 import { validateRegister } from '../utils/registerValidation';
+import { gradientConfig } from '../themes/gradientConfig';
 
 export default function RegisterPage() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -27,35 +28,41 @@ export default function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setshowPassword] = useState(false);
-    const [erroAtivo, setErroAtivo] = useState({ type: '', message: '' });
+    const [erros, setErros] = useState({ name: '', email: '', password: '' });
+
+    function handleTextChange(
+        texto: string,
+        setter: (v: string) => void,
+        campo: 'name' | 'email' | 'password',
+    ) {
+        setter(texto);
+
+        setErros((prev) => ({
+            ...prev,
+            [campo]: '',
+        }));
+    }
 
     const handleResgiter = async () => {
         const validation = validateRegister(name, email, password);
 
-        if (validation.type) {
-            // Salva o erro no estado para ativar o retorno visual
-            setErroAtivo({ type: validation.type, message: validation.message });
+        const errosAtivos =
+            validation.nameError || validation.emailError || validation.passwordError;
+
+        if (errosAtivos) {
+            setErros({
+                name: validation.nameError,
+                email: validation.emailError,
+                password: validation.passwordError,
+            });
             return;
         }
-        //Limpa os erros
-        setErroAtivo({ type: '', message: '' });
-        // Função para limpar o erro visual assim que o usuário digita no campo
-        function handleTextChange(
-            texto: string,
-            setter: (v: string) => void,
-            campo: 'name' | 'email' | 'password',
-        ) {
-            //texto: string - é o texto atualizado que o usuário acabou de digitar;
-            //setter: (v: string) => void - a parte que recebe como parâmetro uma função de atualização do estado,
-            //significa: "uma função que aceita uma string como argumento e não retorna nada", isso permite reutilizar a mesma lógica para os 3 inputs;
-            //setter(texto) - Significa que: se o usuário digitou no campo de e-mail, o setter(texto) vira setEmail(texto)
-            setter(texto);
 
-            const erroPertenceAoCampo =
-                (campo === 'name' && erroAtivo.type === validation.type) ||
-                (campo === 'email' && erroAtivo.type === validation.type) ||
-                (campo === 'password' && erroAtivo.type === validation.type);
-        }
+        setErros({
+            name: '',
+            email: '',
+            password: '',
+        });
 
         try {
             await backendApi.post('/users', { name, email, password });
@@ -65,14 +72,13 @@ export default function RegisterPage() {
             Alert.alert('Erro:', 'Erro ao realizar o cadastro, tente novamente.');
         }
     };
-
     return (
         <LinearGradient
-            colors={[colors.lightBackground, colors.lightBackgroundSec]}
-            start={{ x: 0.85, y: 0.85 }}
-            end={{ x: 0.15, y: 0.15 }}
+            colors={[colors.background, colors.backgroundsec]}
+            start={gradientConfig.start}
+            end={gradientConfig.end}
             style={style.container}>
-            <KeyboardAvoidingView style={style.keyBoardContainer} behavior="height">
+            <KeyboardAvoidingView style={style.keyBoardContainer} behavior="padding">
                 <ScrollView
                     contentContainerStyle={style.scrollContainer}
                     keyboardShouldPersistTaps="handled">
@@ -90,9 +96,9 @@ export default function RegisterPage() {
                             <Text style={style.titleInput}>SEU NOME OU APELIDO</Text>
 
                             <Input
-                                keyboardType="default"
+                                style={[style.input, erros.name && style.inputError]}
                                 value={name}
-                                onChangeText={setName}
+                                onChangeText={(txt) => handleTextChange(txt, setName, 'name')}
                                 icon={
                                     <MaterialIcons
                                         name="create"
@@ -101,13 +107,15 @@ export default function RegisterPage() {
                                     />
                                 }
                             />
+                            {erros.name && <Text style={style.errorText}>{erros.name}</Text>}
 
                             <Text style={style.titleInput}>ENDEREÇO DE E-MAIL</Text>
 
                             <Input
+                                style={[style.input, erros.email && style.inputError]}
                                 keyboardType="email-address"
                                 value={email}
-                                onChangeText={setEmail}
+                                onChangeText={(txt) => handleTextChange(txt, setEmail, 'email')}
                                 icon={
                                     <MaterialIcons
                                         name="email"
@@ -116,13 +124,18 @@ export default function RegisterPage() {
                                     />
                                 }
                             />
+                            {erros.email && <Text style={style.errorText}>{erros.email}</Text>}
+                            {/* {console.log(erros)} */}
 
                             <Text style={style.titleInput}>SENHA</Text>
 
                             <Input
+                                style={[style.input, erros.password && style.inputError]}
                                 keyboardType="default"
                                 value={password}
-                                onChangeText={setPassword}
+                                onChangeText={(txt) =>
+                                    handleTextChange(txt, setPassword, 'password')
+                                }
                                 secureTextEntry={!showPassword}
                                 icon={
                                     <TouchableOpacity
@@ -135,6 +148,9 @@ export default function RegisterPage() {
                                     </TouchableOpacity>
                                 }
                             />
+                            {erros.password && (
+                                <Text style={style.errorText}>{erros.password}</Text>
+                            )}
                         </View>
 
                         <View style={style.buttonBox}>
@@ -160,9 +176,10 @@ const style = StyleSheet.create({
     },
     scrollContainer: {
         flexGrow: 1,
-        paddingBottom: 80,
+        paddingBottom: 30,
     },
     viewContainer: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: 50,
@@ -176,7 +193,7 @@ const style = StyleSheet.create({
         paddingBottom: 10,
     },
     secTitle: {
-        color: colors.primary,
+        color: colors.white,
         fontWeight: 600,
         fontSize: 16,
     },
@@ -192,24 +209,39 @@ const style = StyleSheet.create({
     },
     inputBox: {
         width: '100%',
-        height: Dimensions.get('window').height / 4,
         alignItems: 'flex-start',
         paddingHorizontal: 37,
-        paddingTop: 30,
+        paddingTop: 20,
     },
     titleInput: {
         color: colors.inputBackground,
-        marginTop: 10,
+        marginTop: 20,
         paddingHorizontal: 10,
     },
     inputIconStyle: {
         color: colors.inputIcon,
     },
+    input: {
+        height: 48,
+        width: '90%',
+        borderWidth: 2,
+        borderColor: colors.gray,
+        borderRadius: 40,
+        paddingHorizontal: 20,
+    },
+    inputError: {
+        borderColor: colors.warning,
+    },
+    errorText: {
+        color: colors.warning,
+        fontSize: 12,
+        marginTop: 4,
+    },
     buttonBox: {
         width: '100%',
-        height: Dimensions.get('window').height / 5,
         alignItems: 'center',
-        marginTop: 100,
+        marginTop: 40,
+        paddingBottom: 30,
     },
     button: {
         alignItems: 'center',
