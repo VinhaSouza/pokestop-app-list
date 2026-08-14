@@ -1,5 +1,4 @@
 import { StyleSheet, TextInput, View, TextInputProps } from 'react-native';
-import { colors } from '../themes/colors';
 
 type InputProps = TextInputProps & {
     icon?: React.ReactNode;
@@ -8,7 +7,7 @@ type InputProps = TextInputProps & {
 export function Input({ icon, ...rest }: InputProps) {
     return (
         <View style={style.formBox}>
-            <TextInput style={style.input} {...rest} />
+            <TextInput {...rest} />
             {icon}
         </View>
     );
@@ -16,19 +15,8 @@ export function Input({ icon, ...rest }: InputProps) {
 
 const style = StyleSheet.create({
     formBox: {
-        width: '100%',
-        height: 40,
-        borderWidth: 1,
-        borderRadius: 40,
         flexDirection: 'row',
         marginTop: 10,
-        borderColor: colors.inputBorder,
-        backgroundColor: colors.inputBackground,
         alignItems: 'center',
-    },
-    input: {
-        width: '85%',
-        height: '100%',
-        paddingHorizontal: 20,
     },
 });
