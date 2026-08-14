@@ -43,7 +43,7 @@ export default function RegisterPage() {
         }));
     }
 
-    const handleResgiter = async () => {
+    const handleRegister = async () => {
         const validation = validateRegister(name, email, password);
 
         const errosAtivos =
@@ -125,7 +125,6 @@ export default function RegisterPage() {
                                 }
                             />
                             {erros.email && <Text style={style.errorText}>{erros.email}</Text>}
-                            {/* {console.log(erros)} */}
 
                             <Text style={style.titleInput}>SENHA</Text>
 
@@ -157,7 +156,7 @@ export default function RegisterPage() {
                             <Button
                                 style={style.button}
                                 text="REGISTRAR"
-                                onPress={handleResgiter}
+                                onPress={handleRegister}
                             />
                         </View>
                     </View>
