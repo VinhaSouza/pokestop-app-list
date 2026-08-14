@@ -1,40 +1,25 @@
 export const validateLogin = (email: string, password: string) => {
-    let emailError = false; //<- Cada validação tem sua própria variável para uma não substituir a outra.
-    let passwordError = false; // Começam sem saber se tem um erro.
-    let invalidEmail = false;
-    let invalidPassword = false;
+    const emailEmpty = !email.trim();
+    const passwordEmpty = !password;
+    const emailInvalid = !emailEmpty && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const passwordInvalid = !passwordEmpty && password.length < 6;
 
-    if (!email.trim()) {
-        emailError = true;
+    let emailError = '';
+    let passwordError = '';
+
+    if (emailEmpty) {
+        emailError = 'Digite seu e-mail.';
+    } else if (emailInvalid) {
+        emailError = 'Digite um e-mail válido';
     }
-    if (!email.includes('@')) {
-        invalidEmail = true;
+    if (passwordEmpty) {
+        passwordError = 'Digite sua senha.';
+    } else if (passwordInvalid) {
+        passwordError = 'A senha deve conter no mínimo 6 caracteres.';
     }
-    if (!password) {
-        passwordError = true;
-    }
-    if (password.length < 6) {
-        invalidPassword = true;
-    }
+
     return {
-        // condição ? resultadoSeVerdadeiro : resultadoSeFalso
-        type: emailError
-            ? 'E-mail'
-            : passwordError
-              ? 'Senha'
-              : invalidEmail
-                ? 'E-mail inválido'
-                : invalidPassword
-                  ? 'Senha inválida'
-                  : '', // Significa que não tem erro
-        message: emailError
-            ? 'Digite seu E-mail.'
-            : passwordError
-              ? 'Digite sua senha.'
-              : invalidEmail
-                ? 'Digite um e-mail válido.'
-                : invalidPassword
-                  ? 'A senha deve conter no mínimo 6 caracteres.'
-                  : '', // Significa que não tem erro
+        emailError,
+        passwordError,
     };
 };
