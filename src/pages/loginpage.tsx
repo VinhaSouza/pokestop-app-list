@@ -29,14 +29,38 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [showPassword, setshowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [erros, setErros] = useState({ email: '', password: '' });
+
+    function handleTextChange(
+        texto: string,
+        setter: (v: string) => void,
+        campo: 'email' | 'password',
+    ) {
+        setter(texto);
+
+        setErros((prev) => ({
+            ...prev,
+            [campo]: '',
+        }));
+    }
 
     const handleLogin = async () => {
         const validation = validateLogin(email, password);
-        if (validation.type) {
-            // Aqui é o "", o if entende como "false" e não dispara o
-            Alert.alert(validation.type, validation.message);
+
+        const errosAtivos = validation.emailError || validation.passwordError;
+
+        if (errosAtivos) {
+            setErros({
+                email: validation.emailError,
+                password: validation.passwordError,
+            });
             return;
         }
+
+        setErros({
+            email: '',
+            password: '',
+        });
         setLoading(true);
 
         try {
@@ -82,9 +106,10 @@ export default function LoginPage() {
                             <Text style={style.titleInput}>ENDEREÇO DE E-MAIL</Text>
 
                             <Input
+                                style={[style.inputCamp, erros.email && style.inputError]}
                                 keyboardType="email-address"
                                 value={email}
-                                onChangeText={setEmail}
+                                onChangeText={(txt) => handleTextChange(txt, setEmail, 'email')}
                                 icon={
                                     <MaterialIcons
                                         name="email"
@@ -93,13 +118,17 @@ export default function LoginPage() {
                                     />
                                 }
                             />
+                            {erros.email && <Text style={style.errorText}>{erros.email}</Text>}
 
                             <Text style={style.titleInput}>SENHA</Text>
 
                             <Input
+                                style={[style.inputCamp, erros.password && style.inputError]}
                                 keyboardType="default"
                                 value={password}
-                                onChangeText={setPassword}
+                                onChangeText={(txt) =>
+                                    handleTextChange(txt, setPassword, 'password')
+                                }
                                 secureTextEntry={!showPassword}
                                 icon={
                                     <TouchableOpacity
@@ -112,6 +141,9 @@ export default function LoginPage() {
                                     </TouchableOpacity>
                                 }
                             />
+                            {erros.password && (
+                                <Text style={style.errorText}>{erros.password}</Text>
+                            )}
                         </View>
 
                         <View style={style.buttonBox}>
@@ -160,6 +192,22 @@ const style = StyleSheet.create({
         alignItems: 'flex-start',
         paddingHorizontal: 37,
     },
+    inputCamp: {
+        height: 48,
+        width: '90%',
+        borderWidth: 2,
+        borderColor: colors.gray,
+        borderRadius: 40,
+        paddingHorizontal: 20,
+    },
+    inputError: {
+        borderColor: colors.warning,
+    },
+    errorText: {
+        color: colors.warning,
+        fontSize: 12,
+        marginTop: 4,
+    },
     button: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -178,8 +226,9 @@ const style = StyleSheet.create({
     },
     buttonBox: {
         width: '100%',
-        height: Dimensions.get('window').height / 5,
         alignItems: 'center',
+        marginTop: 40,
+        paddingBottom: 30,
     },
     logo: {
         width: '70%',
@@ -197,6 +246,9 @@ const style = StyleSheet.create({
         color: colors.inputBackground,
         marginTop: 10,
         paddingHorizontal: 10,
+    },
+    input: {
+        borderWidth: 1,
     },
     inputIconStyle: {
         color: colors.inputIcon,
