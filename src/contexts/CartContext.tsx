@@ -8,7 +8,7 @@ interface CartItem {
 
 interface CartContextData {
     cart: CartItem[];
-    increase: (product: { name: string; price: number }) => void;
+    increase: (product: { name: string; price: number }, amount?: number) => void;
     decrease: (name: string) => void;
     getQuantity: (name: string) => number;
     clearCart: () => void;
@@ -28,7 +28,7 @@ export function CartProvider({ children }: CartProviderProps) {
         setCart([]);
     }
 
-    function increase(product: { name: string; price: number }) {
+    function increase(product: { name: string; price: number }, amount: number = 1) {
         const itemExists = cart.find((item) => item.name === product.name);
         if (itemExists) {
             setCart(
@@ -36,7 +36,7 @@ export function CartProvider({ children }: CartProviderProps) {
                     item.name === product.name
                         ? {
                               ...item,
-                              quantity: item.quantity + 1,
+                              quantity: Math.min(item.quantity + amount, 99),
                           }
                         : item,
                 ),
@@ -49,7 +49,7 @@ export function CartProvider({ children }: CartProviderProps) {
             {
                 name: product.name,
                 price: product.price,
-                quantity: 1,
+                quantity: Math.min(amount, 99),
             },
         ]);
     }
