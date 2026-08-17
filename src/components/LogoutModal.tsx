@@ -1,4 +1,4 @@
-import React, { } from 'react';
+import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors } from '../themes/colors';
 
@@ -8,33 +8,28 @@ interface LogoutModalProps {
     onConfirm: () => void;
 }
 
-export default function LogoutModal({visible, onCancel, onConfirm}: LogoutModalProps) {
+export default function LogoutModal({ visible, onCancel, onConfirm }: LogoutModalProps) {
     return (
-        <Modal
-            visible={visible}
-            transparent
-            animationType='slide'
-            onRequestClose={onCancel}
-        >
+        <Modal visible={visible} transparent animationType="slide" onRequestClose={onCancel}>
             <View style={style.overlay}>
                 <View style={style.container}>
                     <Text style={style.title}>Sair da Conta</Text>
 
                     <Text style={style.secTitle}>Tem certeza que deseja sair do aplicativo?</Text>
 
-                        <View style={style.options}>
-                            <TouchableOpacity style={style.cancelButton} onPress={onCancel}>
+                    <View style={style.options}>
+                        <TouchableOpacity style={style.cancelButton} onPress={onCancel}>
                             <Text style={style.buttonTitle}>Cancelar</Text>
-                            </TouchableOpacity>
-                                    
-                            <TouchableOpacity style={style.confirmButton} onPress={onConfirm}>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={style.confirmButton} onPress={onConfirm}>
                             <Text style={style.buttonTitle}>Sair</Text>
-                            </TouchableOpacity>
-                        </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </Modal>
-    )
+    );
 }
 
 const style = StyleSheet.create({
@@ -52,7 +47,7 @@ const style = StyleSheet.create({
         paddingHorizontal: 30,
         paddingTop: 20,
     },
-    title:{
+    title: {
         fontSize: 20,
         fontWeight: 500,
     },
@@ -81,5 +76,5 @@ const style = StyleSheet.create({
         color: colors.white,
         fontWeight: 600,
         fontSize: 18,
-    }
-})
+    },
+});
