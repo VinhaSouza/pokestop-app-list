@@ -3,14 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { storeItems } from '../data/storeItems';
 import { prices } from '../data/prices';
 import { api } from '../services/api';
+import { DataProduct } from '../@types/product';
 
 const PRODUCTS_STORAGE_KEY = '@pokestop:products';
-
-interface DataProduct {
-    name: string;
-    image: string;
-    price: number;
-}
 
 interface ProductsContextData {
     products: DataProduct[];
@@ -45,7 +40,7 @@ export function ProductsProvider({ children }: ProductsProviderProps) {
                 if (storedProducts) {
                     const productsFromStorage: DataProduct[] = JSON.parse(storedProducts);
 
-                    await new Promise((resolve) => setTimeout(resolve, 3000)); // <- Adicionado apenas para testar visualmente o loading. (não é necessário)
+                    await new Promise((resolve) => setTimeout(resolve, 1000)); // <- Adicionado apenas para testar visualmente o loading. (não é necessário)
 
                     console.log('3 - Produtos carregados do STORAGE', productsFromStorage.length);
 
