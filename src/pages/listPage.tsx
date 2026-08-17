@@ -19,6 +19,7 @@ import { iconSizes } from '../themes/iconSizes';
 import { ProductsContext } from '../contexts/ProductsContext';
 import SearchBar from '../components/SearchBar';
 import { filterProducts, ProductFilter } from '../utils/productsFilter';
+import LogoutModal from '../components/LogoutModal';
 
 export default function ListPage() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -27,8 +28,13 @@ export default function ListPage() {
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<ProductFilter>('all');
     const [filterVisible, setFilterVisible] = useState(false);
-
+    const [logoutModalVisible, setLogoutModalVisible] = useState(false);
     const displayedProducts = filterProducts(products, search, filter);
+
+    const handleLogout = () => {
+        setLogoutModalVisible(false);
+        navigation.navigate('Login');
+    };
 
     return (
         <View style={style.container}>
@@ -42,7 +48,13 @@ export default function ListPage() {
                             style={style.iconStyle}
                         />
                     }
-                    onPress={() => navigation.navigate('Login')}
+                    onPress={() => setLogoutModalVisible(true)}
+                />
+
+                <LogoutModal
+                    visible={logoutModalVisible}
+                    onCancel={() => setLogoutModalVisible(false)}
+                    onConfirm={handleLogout}
                 />
 
                 <Header text="PRODUTOS" />
