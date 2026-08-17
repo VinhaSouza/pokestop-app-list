@@ -3,7 +3,6 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { formatName } from '../utils/formatName';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { ButtonIcon } from './ButtonIcon';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { colors } from '../themes/colors';
 import { iconSizes } from '../themes/iconSizes';
 
@@ -12,10 +11,10 @@ interface Props {
     image: string;
     price: number;
     onPress: () => void;
+    onQuickAdd: () => void;
 }
 
-export function ProductCard({ name, image, price, onPress }: Props) {
-    const navigation = useNavigation<NavigationProp<any>>();
+export function ProductCard({ name, image, price, onPress, onQuickAdd }: Props) {
     return (
         <View style={style.cardsProcuct}>
             <TouchableOpacity style={style.imageBox} onPress={onPress}>
@@ -29,7 +28,7 @@ export function ProductCard({ name, image, price, onPress }: Props) {
 
                 <ButtonIcon
                     text=""
-                    onPress={() => navigation.navigate('ShoppingCart')}
+                    onPress={onQuickAdd}
                     icon={
                         <MaterialIcons
                             style={style.iconBox}
