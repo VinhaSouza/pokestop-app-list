@@ -20,6 +20,7 @@ import { ProductsContext } from '../contexts/ProductsContext';
 import SearchBar from '../components/SearchBar';
 import { filterProducts, ProductFilter } from '../utils/productsFilter';
 import LogoutModal from '../components/LogoutModal';
+import { QuickAddModal } from '../components/QuickAddModal';
 
 export default function ListPage() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -30,11 +31,26 @@ export default function ListPage() {
     const [filterVisible, setFilterVisible] = useState(false);
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
     const displayedProducts = filterProducts(products, search, filter);
+    const [quickAddVisible, setQuickAddVisible] = useState(false);
+
+    const [selectedProduct, setSelectedProduct] = useState<{ name: string; price: number } | null>(
+        null,
+    );
 
     const handleLogout = () => {
         setLogoutModalVisible(false);
         navigation.navigate('Login');
     };
+
+    function handleQuickAdd(product: { name: string; price: number }) {
+        setSelectedProduct(product);
+        setQuickAddVisible(true);
+    }
+
+    function handleCloseQuickAdd() {
+        setQuickAddVisible(false);
+        setSelectedProduct(null);
+    }
 
     return (
         <View style={style.container}>
@@ -170,10 +186,21 @@ export default function ListPage() {
                                     image: item.image,
                                 })
                             }
+                            onQuickAdd={() =>
+                                handleQuickAdd({
+                                    name: item.name,
+                                    price: item.price,
+                                })
+                            }
                         />
                     )}
                 />
             )}
+            <QuickAddModal
+                visible={quickAddVisible}
+                product={selectedProduct}
+                onClose={handleCloseQuickAdd}
+            />
         </View>
     );
 }
