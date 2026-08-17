@@ -1,8 +1,15 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, FlatList, Text, ActivityIndicator } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    FlatList,
+    Text,
+    ActivityIndicator,
+    Modal,
+    Pressable,
+} from 'react-native';
 import { Header } from '../components/Header';
 import { ProductCard } from '../components/ProductCard';
-import { Input } from '../components/Input';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { ButtonIcon } from '../components/ButtonIcon';
@@ -11,21 +18,17 @@ import { colors } from '../themes/colors';
 import { iconSizes } from '../themes/iconSizes';
 import { ProductsContext } from '../contexts/ProductsContext';
 import SearchBar from '../components/SearchBar';
+import { filterProducts, ProductFilter } from '../utils/productsFilter';
 
 export default function ListPage() {
     const navigation = useNavigation<NavigationProp<any>>();
     const { totalItems } = useContext(CartContext);
     const { products, loading } = useContext(ProductsContext);
     const [search, setSearch] = useState('');
+    const [filter, setFilter] = useState<ProductFilter>('all');
+    const [filterVisible, setFilterVisible] = useState(false);
 
-    // const RenderInputHeader = () => (
-    //     <View style={style.searchBox}>
-    //         <Input
-    //             placeholder='Pesquise os itens aqui'
-    //             icon={<MaterialIcons name='search' size={iconSizes.meddium} style={style.inputIconStyle}/>}
-    //         />
-    //     </View>
-    // );
+    const displayedProducts = filterProducts(products, search, filter);
 
     return (
         <View style={style.container}>
@@ -60,11 +63,76 @@ export default function ListPage() {
                 </View>
             </View>
 
-            {/* <SearchBar
+            <SearchBar
                 value={search}
                 onChangeText={setSearch}
-                placeholder='Procure aqui...'
-            /> */}
+                onFilterPress={() => setFilterVisible(true)}
+            />
+
+            <Modal
+                visible={filterVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setFilterVisible(false)}>
+                <View style={style.modalContainer}>
+                    <View style={style.filterContainer}>
+                        <Text style={style.filterTitle}>Filtrar Produtos</Text>
+                        <Pressable
+                            style={style.filterOption}
+                            onPress={() => {
+                                setFilter('all');
+                                setFilterVisible(false);
+                            }}>
+                            <Text>Todos</Text>
+                            {filter === 'all' && (
+                                <MaterialIcons name="check" size={iconSizes.small} />
+                            )}
+                        </Pressable>
+
+                        <Pressable
+                            style={style.filterOption}
+                            onPress={() => {
+                                setFilter('nameAsc');
+                                setFilterVisible(false);
+                            }}>
+                            <Text>Nome: A - Z</Text>
+                            {filter === 'nameAsc' && (
+                                <MaterialIcons name="check" size={iconSizes.small} />
+                            )}
+                        </Pressable>
+
+                        <Pressable
+                            style={style.filterOption}
+                            onPress={() => {
+                                setFilter('priceAsc');
+                                setFilterVisible(false);
+                            }}>
+                            <Text>Menor preço</Text>
+                            {filter === 'priceAsc' && (
+                                <MaterialIcons name="check" size={iconSizes.small} />
+                            )}
+                        </Pressable>
+
+                        <Pressable
+                            style={style.filterOption}
+                            onPress={() => {
+                                setFilter('priceDesc');
+                                setFilterVisible(false);
+                            }}>
+                            <Text>Maior preço</Text>
+                            {filter === 'priceDesc' && (
+                                <MaterialIcons name="check" size={iconSizes.small} />
+                            )}
+                        </Pressable>
+
+                        <Pressable
+                            style={style.closeButton}
+                            onPress={() => setFilterVisible(false)}>
+                            <Text style={style.closeButtonText}>Fechar</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
 
             {loading ? (
                 <View style={style.loading}>
@@ -73,7 +141,7 @@ export default function ListPage() {
                 </View>
             ) : (
                 <FlatList
-                    data={products}
+                    data={displayedProducts}
                     numColumns={2}
                     keyExtractor={(item) => item.name}
                     columnWrapperStyle={style.row} // Aplica um estilo em cada linha da lista.
@@ -92,7 +160,6 @@ export default function ListPage() {
                             }
                         />
                     )}
-                    // ListHeaderComponent={RenderInputHeader}
                 />
             )}
         </View>
@@ -110,6 +177,41 @@ const style = StyleSheet.create({
         justifyContent: 'space-around',
         marginTop: 40,
         paddingBottom: 10,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    filterContainer: {
+        width: '80%',
+        padding: 20,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: colors.gray,
+        backgroundColor: colors.white,
+    },
+    filterTitle: {
+        fontSize: 20,
+        fontWeight: 600,
+        marginBottom: 15,
+    },
+    filterOption: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 16,
+    },
+    closeButton: {
+        alignItems: 'center',
+        marginTop: 10,
+        paddingVertical: 10,
+        backgroundColor: colors.primary,
+        borderRadius: 18,
+    },
+    closeButtonText: {
+        color: colors.white,
+        fontWeight: 600,
     },
     iconStyle: {
         color: colors.white,
