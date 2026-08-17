@@ -10,9 +10,10 @@ import { CartContext } from '../contexts/CartContext';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import { colors } from '../themes/colors';
 import { iconSizes } from '../themes/iconSizes';
+import { Button } from '../components/Button';
 
 export default function ProductDetailPage() {
-    //const navigation = useNavigation<NavigationProp<any>>() //Será utilizado futuramente
+    const navigation = useNavigation<NavigationProp<any>>();
     const route = useRoute<RouteProp<RootStackParamList, 'ProductDetail'>>();
     const { name } = route.params;
     const { price } = route.params;
@@ -73,6 +74,12 @@ export default function ProductDetailPage() {
                     />
                 </View>
 
+                <Button
+                    style={style.buttonAddCart}
+                    text="Ir ao Carrinho"
+                    onPress={() => navigation.navigate('ShoppingCart')}
+                />
+
                 <Text style={style.description}>
                     {item?.effect_entries?.find((text: any) => text.language.name === 'en')?.effect}
                 </Text>
@@ -126,6 +133,13 @@ const style = StyleSheet.create({
         color: colors.white,
         backgroundColor: colors.primary,
         borderRadius: 5,
+        elevation: 3,
+    },
+    buttonAddCart: {
+        backgroundColor: colors.primary,
+        padding: 16,
+        borderRadius: 8,
+        elevation: 3,
     },
     countBox: {
         flexDirection: 'row',
