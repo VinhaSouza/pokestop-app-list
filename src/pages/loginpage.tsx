@@ -106,7 +106,7 @@ export default function LoginPage() {
                             <Text style={style.titleInput}>ENDEREÇO DE E-MAIL</Text>
 
                             <Input
-                                style={[style.inputCamp, erros.email && style.inputError]}
+                                style={[style.input, erros.email && style.inputError]}
                                 keyboardType="email-address"
                                 value={email}
                                 onChangeText={(txt) => handleTextChange(txt, setEmail, 'email')}
@@ -123,7 +123,7 @@ export default function LoginPage() {
                             <Text style={style.titleInput}>SENHA</Text>
 
                             <Input
-                                style={[style.inputCamp, erros.password && style.inputError]}
+                                style={[style.input, erros.password && style.inputError]}
                                 keyboardType="default"
                                 value={password}
                                 onChangeText={(txt) =>
@@ -192,7 +192,7 @@ const style = StyleSheet.create({
         alignItems: 'flex-start',
         paddingHorizontal: 37,
     },
-    inputCamp: {
+    input: {
         height: 48,
         width: '90%',
         borderWidth: 2,
@@ -246,9 +246,6 @@ const style = StyleSheet.create({
         color: colors.inputBackground,
         marginTop: 10,
         paddingHorizontal: 10,
-    },
-    input: {
-        borderWidth: 1,
     },
     inputIconStyle: {
         color: colors.inputIcon,
