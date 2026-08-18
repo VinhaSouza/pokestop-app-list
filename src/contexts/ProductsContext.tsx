@@ -40,8 +40,6 @@ export function ProductsProvider({ children }: ProductsProviderProps) {
                 if (storedProducts) {
                     const productsFromStorage: DataProduct[] = JSON.parse(storedProducts);
 
-                    await new Promise((resolve) => setTimeout(resolve, 1000)); // <- Adicionado apenas para testar visualmente o loading. (não é necessário)
-
                     console.log('3 - Produtos carregados do STORAGE', productsFromStorage.length);
 
                     setProducts(productsFromStorage);
