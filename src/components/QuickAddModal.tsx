@@ -1,13 +1,6 @@
 import { useContext } from 'react';
 import { CartContext } from '../contexts/CartContext';
-import {
-    Modal,
-    Text,
-    TouchableOpacity,
-    View,
-    StyleSheet,
-    TouchableWithoutFeedback,
-} from 'react-native';
+import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { formatName } from '../utils/formatName';
 import { colors } from '../themes/colors';
 import { iconSizes } from '../themes/iconSizes';
@@ -42,57 +35,58 @@ export function QuickAddModal({ visible, product, onClose }: QuickAddModalProps)
 
     return (
         <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-            <TouchableWithoutFeedback onPress={onClose}>
-                <View style={style.overlay}>
-                    <View style={style.container}>
-                        <Text style={style.productTitle}>{formatName(product.name)}</Text>
+            <View style={style.overlay}>
+                <TouchableWithoutFeedback onPress={onClose}>
+                    <View style={style.overlayTouch} />
+                </TouchableWithoutFeedback>
+                <View style={style.container}>
+                    <Text style={style.productTitle}>{formatName(product.name)}</Text>
 
-                        <View style={style.counterBox}>
-                            <ButtonIcon
-                                text=""
-                                onPress={() => decrease(product.name)}
-                                icon={
-                                    <MaterialIcons
-                                        style={style.buttons}
-                                        name="remove"
-                                        size={iconSizes.meddium}
-                                    />
-                                }
-                            />
+                    <View style={style.counterBox}>
+                        <ButtonIcon
+                            text=""
+                            onPress={() => decrease(product.name)}
+                            icon={
+                                <MaterialIcons
+                                    style={style.buttons}
+                                    name="remove"
+                                    size={iconSizes.meddium}
+                                />
+                            }
+                        />
 
-                            <Text style={style.counter}>{quantity}</Text>
+                        <Text style={style.counter}>{quantity}</Text>
 
-                            <ButtonIcon
-                                text=""
-                                onPress={() => handleIncrease()}
-                                icon={
-                                    <MaterialIcons
-                                        style={style.buttons}
-                                        name="add"
-                                        size={iconSizes.meddium}
-                                    />
-                                }
-                            />
-                        </View>
-
-                        <View style={style.counterBox}>
-                            <Button
-                                text="+ 5"
-                                onPress={() => handleIncrease(5)}
-                                style={style.addButtons}
-                            />
-
-                            <Button
-                                text="+ 10"
-                                onPress={() => handleIncrease(10)}
-                                style={style.addButtons}
-                            />
-                        </View>
-
-                        <Button text="FECHAR" onPress={onClose} style={style.closeButton} />
+                        <ButtonIcon
+                            text=""
+                            onPress={() => handleIncrease()}
+                            icon={
+                                <MaterialIcons
+                                    style={style.buttons}
+                                    name="add"
+                                    size={iconSizes.meddium}
+                                />
+                            }
+                        />
                     </View>
+
+                    <View style={style.counterBox}>
+                        <Button
+                            text="+ 5"
+                            onPress={() => handleIncrease(5)}
+                            style={style.addButtons}
+                        />
+
+                        <Button
+                            text="+ 10"
+                            onPress={() => handleIncrease(10)}
+                            style={style.addButtons}
+                        />
+                    </View>
+
+                    <Button text="FECHAR" onPress={onClose} style={style.closeButton} />
                 </View>
-            </TouchableWithoutFeedback>
+            </View>
         </Modal>
     );
 }
@@ -102,6 +96,11 @@ const style = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         backgroundColor: colors.fadedBlack,
+    },
+    overlayTouch: {
+        ...StyleSheet.absoluteFillObject, // Esse componente é utilizado para ocupar toda a área do elemento pai. 
+        // É equivalente ao position: 'absolute'.
+        // É usado para criar uma camada que cobre toda a tela, como overlay, fundos, áreas clicáveis.
     },
     container: {
         backgroundColor: colors.white,
