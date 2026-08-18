@@ -91,13 +91,6 @@ app.post('/login', async (req, res) => {
     });
 });
 
-// Essa é apenas uma Rota de Teste para saber se o middleware está funcionando (será removida em breve)
-app.get('/protected', authMiddleware, (req, res) => {
-    res.json({
-        userId: req.userId,
-    });
-});
-
 app.get('/cart', authMiddleware, async (req, res) => {
     try {
         const result = await pool.query(
