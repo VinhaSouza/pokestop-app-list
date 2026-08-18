@@ -107,6 +107,27 @@ app.get('/cart', authMiddleware, async (req, res) => {
     }
 });
 
+app.post('/cart', authMiddleware, async (req, res) => {
+    const { productId, quantity } = req.body;
+
+    if (typeof productId !== 'string' || typeof quantity !== 'number') {
+        return res.status(400).json({
+            message: 'Produto e quantidade são obrigatórios.',
+        });
+    }
+    if (quantity <= 0) {
+        return res.status(400).json({
+            message: 'A quantidade deve ser maior que zero.',
+        });
+    }
+    const result = await pool.query(
+        'INSERT INTO cart_items (user_id, product_id, quantity) VALUES ($1, $2, $3) ON CONFLICT (user_id, product_id) DO UPDATE SET quantity = cart_items.quantity + EXCLUDED.quantity, update_at = CURRENT_TIMESTAMP RETURNING id, product_id, quantity',
+        [req.userId, productId, quantity]
+    );
+
+    res.status(201).json(result.rows[0]);
+});
+
 app.listen(process.env.DB_PORTBACKEND, () => {
     console.log('A API está rodando com sucesso!');
 });
