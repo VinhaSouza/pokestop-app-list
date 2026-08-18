@@ -98,7 +98,7 @@ const style = StyleSheet.create({
         backgroundColor: colors.fadedBlack,
     },
     overlayTouch: {
-        ...StyleSheet.absoluteFillObject, // Esse componente é utilizado para ocupar toda a área do elemento pai. 
+        ...StyleSheet.absoluteFillObject, // Esse componente é utilizado para ocupar toda a área do elemento pai.
         // É equivalente ao position: 'absolute'.
         // É usado para criar uma camada que cobre toda a tela, como overlay, fundos, áreas clicáveis.
     },
