@@ -94,8 +94,24 @@ app.post('/login', async (req, res) => {
 // Essa é apenas uma Rota de Teste para saber se o middleware está funcionando (será removida em breve)
 app.get('/protected', authMiddleware, (req, res) => {
     res.json({
-        message: 'Conseguindo acessar uma rota protegida!',
+        userId: req.userId,
     });
+});
+
+app.get('/cart', authMiddleware, async (req, res) => {
+    try {
+        const result = await pool.query(
+            'SELECT id, product_id, quantity FROM cart_items WHERE user_id = $1',
+            [req.userId],
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.log('Erro ao buscar carrinho:', error);
+
+        res.status(500).json({
+            message: 'Erro ao buscar o carrinho.',
+        });
+    }
 });
 
 app.listen(process.env.DB_PORTBACKEND, () => {
