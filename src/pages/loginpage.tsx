@@ -22,6 +22,7 @@ import { colors } from '../themes/colors';
 import { backendApi } from '../services/api';
 import axios from 'axios';
 import { validateLogin } from '../utils/loginValidation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginPage() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -64,7 +65,14 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            await backendApi.post('/login', { email, password }, { timeout: 3000 });
+            const response = await backendApi.post(
+                '/login',
+                { email, password },
+                { timeout: 3000 },
+            );
+            const token = response.data.token;
+
+            await AsyncStorage.setItem('@pokestop:token', token);
 
             navigation.navigate('HomeRoutes');
         } catch (error) {
