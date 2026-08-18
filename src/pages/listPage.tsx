@@ -1,13 +1,5 @@
 import React, { useContext, useState } from 'react';
-import {
-    StyleSheet,
-    View,
-    FlatList,
-    Text,
-    ActivityIndicator,
-    Modal,
-    Pressable,
-} from 'react-native';
+import { StyleSheet, View, FlatList, Text, ActivityIndicator } from 'react-native';
 import { Header } from '../components/Header';
 import { ProductCard } from '../components/ProductCard';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
@@ -21,6 +13,7 @@ import SearchBar from '../components/SearchBar';
 import { filterProducts, ProductFilter } from '../utils/productsFilter';
 import LogoutModal from '../components/LogoutModal';
 import { QuickAddModal } from '../components/QuickAddModal';
+import FilterModal from '../components/FilterModal';
 
 export default function ListPage() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -32,7 +25,6 @@ export default function ListPage() {
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
     const displayedProducts = filterProducts(products, search, filter);
     const [quickAddVisible, setQuickAddVisible] = useState(false);
-
     const [selectedProduct, setSelectedProduct] = useState<{ name: string; price: number } | null>(
         null,
     );
@@ -97,70 +89,12 @@ export default function ListPage() {
                 onFilterPress={() => setFilterVisible(true)}
             />
 
-            <Modal
+            <FilterModal
                 visible={filterVisible}
-                transparent
-                animationType="fade"
-                onRequestClose={() => setFilterVisible(false)}>
-                <View style={style.modalContainer}>
-                    <View style={style.filterContainer}>
-                        <Text style={style.filterTitle}>Filtrar Produtos</Text>
-                        <Pressable
-                            style={style.filterOption}
-                            onPress={() => {
-                                setFilter('all');
-                                setFilterVisible(false);
-                            }}>
-                            <Text>Todos</Text>
-                            {filter === 'all' && (
-                                <MaterialIcons name="check" size={iconSizes.small} />
-                            )}
-                        </Pressable>
-
-                        <Pressable
-                            style={style.filterOption}
-                            onPress={() => {
-                                setFilter('nameAsc');
-                                setFilterVisible(false);
-                            }}>
-                            <Text>Nome: A - Z</Text>
-                            {filter === 'nameAsc' && (
-                                <MaterialIcons name="check" size={iconSizes.small} />
-                            )}
-                        </Pressable>
-
-                        <Pressable
-                            style={style.filterOption}
-                            onPress={() => {
-                                setFilter('priceAsc');
-                                setFilterVisible(false);
-                            }}>
-                            <Text>Menor preço</Text>
-                            {filter === 'priceAsc' && (
-                                <MaterialIcons name="check" size={iconSizes.small} />
-                            )}
-                        </Pressable>
-
-                        <Pressable
-                            style={style.filterOption}
-                            onPress={() => {
-                                setFilter('priceDesc');
-                                setFilterVisible(false);
-                            }}>
-                            <Text>Maior preço</Text>
-                            {filter === 'priceDesc' && (
-                                <MaterialIcons name="check" size={iconSizes.small} />
-                            )}
-                        </Pressable>
-
-                        <Pressable
-                            style={style.closeButton}
-                            onPress={() => setFilterVisible(false)}>
-                            <Text style={style.closeButtonText}>Fechar</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </Modal>
+                filter={filter}
+                onFilterChange={setFilter}
+                onClose={() => setFilterVisible(false)}
+            />
 
             {loading ? (
                 <View style={style.loading}>
