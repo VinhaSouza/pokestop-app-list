@@ -18,6 +18,10 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
         // Verifica se o token é válido usando a chave secreta do servidor e também se o token está expirado
         const decoded = jwt.verify(token, process.env.JWT_SECRET!);
 
+        if (typeof decoded !== 'string') {
+            req.userId = decoded.userId as number;
+        }
+
         console.log('Encontrado Token válido:', decoded);
 
         // Permite que a requisição continue para a rota protegida
