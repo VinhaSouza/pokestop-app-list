@@ -3,6 +3,8 @@ import cors from 'cors';
 import pool from './db';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+import { authMiddleware } from './middlewares/authMiddleware';
 
 dotenv.config();
 const app = express();
@@ -77,12 +79,22 @@ app.post('/login', async (req, res) => {
         return res.status(401).json({ message: 'Email ou senha incorretos' });
     }
 
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+
     res.json({
         message: 'Login realizado com sucesso!',
         user: {
             id: user.id,
             name: user.name,
         },
+        token,
+    });
+});
+
+// Essa é apenas uma Rota de Teste para saber se o middleware está funcionando (será removida em breve)
+app.get('/protected', authMiddleware, (req, res) => {
+    res.json({
+        message: 'Conseguindo acessar uma rota protegida!',
     });
 });
 
