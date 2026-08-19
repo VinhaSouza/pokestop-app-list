@@ -14,10 +14,12 @@ import { filterProducts, ProductFilter } from '../utils/productsFilter';
 import LogoutModal from '../components/LogoutModal';
 import { QuickAddModal } from '../components/QuickAddModal';
 import FilterModal from '../components/FilterModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function ListPage() {
     const navigation = useNavigation<NavigationProp<any>>();
-    const { totalItems } = useContext(CartContext);
+    const { totalItems, clearCart } = useContext(CartContext);
     const { products, loading } = useContext(ProductsContext);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<ProductFilter>('all');
@@ -28,8 +30,14 @@ export default function ListPage() {
     const [selectedProduct, setSelectedProduct] = useState<{ name: string; price: number } | null>(
         null,
     );
+    const { setUser } = useContext(AuthContext);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        setUser(null);
+
+        await AsyncStorage.removeItem('@pokestop:token');
+        await AsyncStorage.removeItem('@pokestop:userId');
+
         setLogoutModalVisible(false);
         navigation.navigate('Login');
     };
