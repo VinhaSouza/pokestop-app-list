@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Logo from '../assets/logo-pokeapp.png';
 import { Input } from '../components/Input';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Button } from '../components/Button';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -23,6 +23,7 @@ import { backendApi } from '../services/api';
 import axios from 'axios';
 import { validateLogin } from '../utils/loginValidation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function LoginPage() {
     const navigation = useNavigation<NavigationProp<any>>();
@@ -31,6 +32,7 @@ export default function LoginPage() {
     const [showPassword, setshowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [erros, setErros] = useState({ email: '', password: '' });
+    const { setUser } = useContext(AuthContext);
 
     function handleTextChange(
         texto: string,
@@ -71,8 +73,13 @@ export default function LoginPage() {
                 { timeout: 3000 },
             );
             const token = response.data.token;
+            const user = response.data.user;
 
             await AsyncStorage.setItem('@pokestop:token', token);
+            await AsyncStorage.setItem('@pokestop:userId', String(user.id));
+
+            setUser(user);
+            console.log('Usuário logado:', user);
 
             navigation.navigate('HomeRoutes');
         } catch (error) {
