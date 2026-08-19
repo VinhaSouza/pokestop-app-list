@@ -1,7 +1,7 @@
 import { View, Text, Modal, Pressable, StyleSheet } from 'react-native';
 import { colors } from '../themes/colors';
 import { iconSizes } from '../themes/iconSizes';
-import { ProductFilter } from '../utils/productsFilter';
+import { filterOptions, ProductFilter } from '../utils/productsFilter';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 interface FilterModalProps {
@@ -27,34 +27,38 @@ export default function FilterModal({
             <View style={style.modalContainer}>
                 <View style={style.filterContainer}>
                     <Text style={style.filterTitle}>Filtrar Produtos</Text>
-                    <Pressable style={style.filterOption} onPress={() => handleFilterChange('all')}>
+                    <Pressable
+                        style={style.filterOption}
+                        onPress={() => handleFilterChange(filterOptions.filterAll)}>
                         <Text>Todos</Text>
-                        {filter === 'all' && <MaterialIcons name="check" size={iconSizes.small} />}
+                        {filter === filterOptions.filterAll && (
+                            <MaterialIcons name="check" size={iconSizes.small} />
+                        )}
                     </Pressable>
 
                     <Pressable
                         style={style.filterOption}
-                        onPress={() => handleFilterChange('nameAsc')}>
+                        onPress={() => handleFilterChange(filterOptions.filterName)}>
                         <Text>Nome: A - Z</Text>
-                        {filter === 'nameAsc' && (
+                        {filter === filterOptions.filterName && (
                             <MaterialIcons name="check" size={iconSizes.small} />
                         )}
                     </Pressable>
 
                     <Pressable
                         style={style.filterOption}
-                        onPress={() => handleFilterChange('priceAsc')}>
+                        onPress={() => handleFilterChange(filterOptions.filtePriceAsc)}>
                         <Text>Menor preço</Text>
-                        {filter === 'priceAsc' && (
+                        {filter === filterOptions.filtePriceAsc && (
                             <MaterialIcons name="check" size={iconSizes.small} />
                         )}
                     </Pressable>
 
                     <Pressable
                         style={style.filterOption}
-                        onPress={() => handleFilterChange('priceDesc')}>
+                        onPress={() => handleFilterChange(filterOptions.filterPriceDesc)}>
                         <Text>Maior preço</Text>
-                        {filter === 'priceDesc' && (
+                        {filter === filterOptions.filterPriceDesc && (
                             <MaterialIcons name="check" size={iconSizes.small} />
                         )}
                     </Pressable>
