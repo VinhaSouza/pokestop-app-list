@@ -18,7 +18,7 @@ interface QuickAddModalProps {
 }
 
 export function QuickAddModal({ visible, product, onClose }: QuickAddModalProps) {
-    const { getQuantity, increase, decrease } = useContext(CartContext);
+    const { getQuantity, addToCart, decrease } = useContext(CartContext);
 
     if (!product) {
         return null;
@@ -26,11 +26,11 @@ export function QuickAddModal({ visible, product, onClose }: QuickAddModalProps)
 
     const quantity = getQuantity(product.name);
 
-    function handleIncrease(amount: number = 1) {
+    async function handleIncrease(amount: number = 1) {
         if (!product) {
             return;
         }
-        increase(product, amount);
+        await addToCart(product, amount);
     }
 
     return (
