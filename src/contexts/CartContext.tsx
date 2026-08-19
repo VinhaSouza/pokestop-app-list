@@ -22,7 +22,7 @@ interface CartContextData {
     increase: (product: { name: string; price: number }, amount?: number) => void;
     decrease: (name: string) => Promise<void>;
     getQuantity: (name: string) => number;
-    clearCart: () => void;
+    clearCart: () => Promise<void>;
     totalItems: number;
     addToCart: (product: { name: string; price: number }, amount?: number) => Promise<void>;
 }
@@ -103,7 +103,7 @@ export function CartProvider({ children }: CartProviderProps) {
         }
 
         try {
-            const response = await backendApi.post(
+            await backendApi.post(
                 '/cart',
                 { productId: product.name, quantity: amount },
                 {
@@ -118,8 +118,21 @@ export function CartProvider({ children }: CartProviderProps) {
         }
     }
 
-    function clearCart() {
+    async function clearCart() {
         console.log('ClearCart foi executado.');
+        const token = await getToken();
+
+        if (!token) {
+            return;
+        }
+
+        for (const item of cart) {
+            await backendApi.delete(`/cart/${item.name}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+        }
         setCart([]);
     }
 
