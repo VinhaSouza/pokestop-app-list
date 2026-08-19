@@ -122,10 +122,73 @@ app.post('/cart', authMiddleware, async (req, res) => {
     }
     const result = await pool.query(
         'INSERT INTO cart_items (user_id, product_id, quantity) VALUES ($1, $2, $3) ON CONFLICT (user_id, product_id) DO UPDATE SET quantity = cart_items.quantity + EXCLUDED.quantity, update_at = CURRENT_TIMESTAMP RETURNING id, product_id, quantity',
-        [req.userId, productId, quantity]
+        [req.userId, productId, quantity],
     );
 
     res.status(201).json(result.rows[0]);
+});
+
+app.patch('/cart/:productId', authMiddleware, async (req, res) => {
+    const { productId } = req.params;
+    const { quantity } = req.body;
+
+    if (typeof productId !== 'string' || typeof quantity !== 'number') {
+        return res.status(400).json({
+            message: 'Produto e quantidade são obrigatórios.',
+        });
+    }
+    if (quantity <= 0) {
+        return res.status(400).json({
+            message: 'A quantidade deve ser maior que zero.',
+        });
+    }
+    try {
+        const result = await pool.query(
+            'UPDATE cart_items SET quantity = $1, update_at = CURRENT_TIMESTAMP WHERE user_id = $2 AND product_id = $3 RETURNING id, product_id, quantity',
+            [quantity, req.userId, productId],
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                message: 'Produto não encontrado no carrinho.',
+            });
+        }
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log('Erro ao atualizar o carrinho:', error);
+
+        res.status(500).json({
+            message: 'Erro ao atualizar o carrinho',
+        });
+    }
+});
+
+app.delete('/cart/:productId', authMiddleware, async (req, res) => {
+    const { productId } = req.params;
+
+    try {
+        const result = await pool.query(
+            'DELETE FROM cart_items WHERE user_id = $1 AND product_id = $2 RETURNING id, product_id,quantity',
+            [req.userId, productId],
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                message: 'Produto não encontrado no carrinho.',
+            });
+        }
+
+        res.json({
+            message: 'Produto removido do carrinho.',
+            item: result.rows[0],
+        });
+    } catch (error) {
+        console.log('Erro ao remover produto do carrinho:', error);
+
+        res.status(500).json({
+            message: 'Erro ao remover produto do carrinho.',
+        });
+    }
 });
 
 app.listen(process.env.DB_PORTBACKEND, () => {
