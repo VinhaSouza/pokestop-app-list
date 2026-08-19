@@ -1,7 +1,12 @@
 import { DataProduct } from '../@types/product';
 
-export type ProductFilter = 'all' | 'nameAsc' | 'priceAsc' | 'priceDesc'; //Opções disponíveis para ordenar os produtos.
-
+export type ProductFilter = 'all' | 'nameAsc' | 'priceAsc' | 'priceDesc';
+export const filterOptions = {
+    filterAll: 'all' as const,
+    filterName: 'nameAsc' as const,
+    filtePriceAsc: 'priceAsc' as const,
+    filterPriceDesc: 'priceDesc' as const,
+};
 // Padroniza o texto para facilitar a comparação
 // trim() -> remove espaços do início e do final
 // toLowerCase() -> transforma tudo em letras minúsculas
@@ -27,18 +32,19 @@ export function filterProducts(products: DataProduct[], search: string, filter: 
 
     //Define qual ordenação será aplicada de acordo com o filtro selecionado
     switch (filter) {
-        case 'nameAsc':
+        case filterOptions.filterName:
             sortedProducts.sort((a, b) => a.name.localeCompare(b.name)); // sort() -> altera o próprio rray, por isso o [...filteredProducts] antes de ordenar
             break;
 
-        case 'priceAsc':
+        case filterOptions.filtePriceAsc:
             sortedProducts.sort((a, b) => a.price - b.price);
             break;
 
-        case 'priceDesc':
+        case filterOptions.filterPriceDesc:
             sortedProducts.sort((a, b) => b.price - a.price);
+            break;
 
-        case 'all':
+        case filterOptions.filterAll:
         default:
             break;
     }
