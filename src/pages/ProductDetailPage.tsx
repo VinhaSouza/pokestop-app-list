@@ -19,7 +19,7 @@ export default function ProductDetailPage() {
     const { price } = route.params;
     const { image } = route.params;
     const [item, setItem] = useState<any>('');
-    const { increase, decrease, getQuantity } = useContext(CartContext);
+    const { addToCart, decrease, getQuantity } = useContext(CartContext);
     const quantity = getQuantity(name);
 
     async function getItems() {
@@ -56,7 +56,7 @@ export default function ProductDetailPage() {
                                 size={iconSizes.meddium}
                             />
                         }
-                        onPress={() => increase({ name, price })}
+                        onPress={() => addToCart({ name, price })}
                     />
 
                     <Text style={style.countText}>{quantity}</Text>
