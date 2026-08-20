@@ -29,7 +29,7 @@ export default function ShoppingCartPage() {
                 <View style={style.containerHeader}>
                     <ButtonIcon
                         text=""
-                        onPress={() => navigation.navigate('List')}
+                        onPress={() => navigation.navigate('BottomTabs', { screen: 'Home' })}
                         icon={
                             <MaterialIcons
                                 name="arrow-back"
@@ -43,7 +43,7 @@ export default function ShoppingCartPage() {
 
                     <ButtonIcon
                         text=""
-                        onPress={() => navigation.navigate('List')}
+                        onPress={() => navigation.navigate('BottomTabs', { screen: 'Profile' })}
                         icon={
                             <MaterialIcons
                                 name="account-circle"
