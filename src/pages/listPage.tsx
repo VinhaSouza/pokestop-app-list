@@ -11,9 +11,9 @@ import { iconSizes } from '../themes/iconSizes';
 import { ProductsContext } from '../contexts/ProductsContext';
 import SearchBar from '../components/SearchBar';
 import { filterProducts, ProductFilter } from '../utils/productsFilter';
-import LogoutModal from '../components/LogoutModal';
-import { QuickAddModal } from '../components/QuickAddModal';
-import FilterModal from '../components/FilterModal';
+import LogoutModal from '../components/modals/LogoutModal';
+import { QuickAddModal } from '../components/modals/QuickAddModal';
+import FilterModal from '../components/modals/FilterModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../contexts/AuthContext';
 

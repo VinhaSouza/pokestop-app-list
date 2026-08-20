@@ -68,7 +68,7 @@ export default function RegisterPage() {
             await backendApi.post('/users', { name, email, password });
             navigation.navigate('Login');
             console.log('Usuário cadastrado com sucesso');
-        } catch (error) {
+        } catch {
             Alert.alert('Erro:', 'Erro ao realizar o cadastro, tente novamente.');
         }
     };
