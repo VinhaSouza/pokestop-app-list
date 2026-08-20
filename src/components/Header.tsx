@@ -12,9 +12,8 @@ export function Header({ ...rest }: Props) {
 const style = StyleSheet.create({
     title: {
         fontSize: 24,
-        padding: 10,
         color: colors.white,
         fontWeight: '900',
-        textAlign: 'center',
+        marginTop: 15,
     },
 });
