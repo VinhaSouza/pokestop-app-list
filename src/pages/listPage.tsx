@@ -19,7 +19,7 @@ import { AuthContext } from '../contexts/AuthContext';
 
 export default function ListPage() {
     const navigation = useNavigation<NavigationProp<any>>();
-    const { totalItems, clearCart } = useContext(CartContext);
+    const { totalItems } = useContext(CartContext);
     const { products, loading } = useContext(ProductsContext);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<ProductFilter>('all');
