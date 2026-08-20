@@ -3,6 +3,7 @@ export const colors = {
     black: '#000000',
     gray: '#ccc',
     warning: '#ffd900',
+    confirm: '#236413',
     fadedBlack: '#0000003c',
 
     background: '#8e0114',
