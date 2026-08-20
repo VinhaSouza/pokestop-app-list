@@ -1,7 +1,7 @@
 import { View, Text, Modal, Pressable, StyleSheet } from 'react-native';
-import { colors } from '../themes/colors';
-import { iconSizes } from '../themes/iconSizes';
-import { filterOptions, ProductFilter } from '../utils/productsFilter';
+import { colors } from '../../themes/colors';
+import { iconSizes } from '../../themes/iconSizes';
+import { filterOptions, ProductFilter } from '../../utils/productsFilter';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 interface FilterModalProps {
