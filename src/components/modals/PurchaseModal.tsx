@@ -10,18 +10,21 @@ interface PurchaseModalProps {
     onClose: () => void;
 }
 
-export default function PurchaseModal ({visible, onClose}: PurchaseModalProps) {
+export default function PurchaseModal({ visible, onClose }: PurchaseModalProps) {
     return (
-        <Modal visible={visible} transparent animationType='fade' onRequestClose={onClose}>
+        <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
             <View style={style.overlay}>
                 <View style={style.container}>
                     <Text style={style.title}>Sua compra foi realizada com sucesso!</Text>
-                    <MaterialIcons name='check-circle' size={iconSizes.extraLarge} style={style.icon}/>
-                
-                    <Button text="OK" onPress={onClose} style={style.button}/>
+                    <MaterialIcons
+                        name="check-circle"
+                        size={iconSizes.extraLarge}
+                        style={style.icon}
+                    />
+
+                    <Button text="OK" onPress={onClose} style={style.button} />
                 </View>
             </View>
-
         </Modal>
     );
 }
@@ -60,4 +63,4 @@ const style = StyleSheet.create({
         marginTop: 30,
         backgroundColor: colors.confirm,
     },
-})
+});
