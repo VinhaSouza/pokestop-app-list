@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { colors } from '../themes/colors';
+import { colors } from '../../themes/colors';
 
 interface ClearCartModalProps {
     visible: boolean;
