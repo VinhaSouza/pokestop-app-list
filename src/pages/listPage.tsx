@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react';
-import { StyleSheet, View, FlatList, Text, ActivityIndicator } from 'react-native';
+import React, { useCallback, useContext, useState } from 'react';
+import { StyleSheet, View, FlatList, Text, ActivityIndicator, BackHandler } from 'react-native';
 import { Header } from '../components/Header';
 import { ProductCard } from '../components/ProductCard';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation, NavigationProp, useFocusEffect } from '@react-navigation/native';
 import { ButtonIcon } from '../components/ButtonIcon';
 import { CartContext } from '../contexts/CartContext';
 import { colors } from '../themes/colors';
@@ -41,6 +41,18 @@ export default function ListPage() {
         setLogoutModalVisible(false);
         navigation.navigate('Login');
     };
+
+    useFocusEffect(
+        useCallback(() => {
+            const handleBackPress = () => {
+                setLogoutModalVisible(true);
+                return true;
+            };
+
+            const subscription = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+            return () => subscription.remove();
+        }, []),
+    );
 
     function handleQuickAdd(product: { name: string; price: number }) {
         setSelectedProduct(product);
