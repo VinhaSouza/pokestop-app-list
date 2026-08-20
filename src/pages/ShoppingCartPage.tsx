@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Pressable } from 'react-native';
 import { Header } from '../components/Header';
 import { ButtonIcon } from '../components/ButtonIcon';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
@@ -11,16 +11,29 @@ import { formatName } from '../utils/formatName';
 import { Button } from '../components/Button';
 import { iconSizes } from '../themes/iconSizes';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ClearCartModal from '../components/ClearCartModal';
+import ClearCartModal from '../components/modals/ClearCartModal';
+import PurchaseModal from '../components/modals/PurchaseModal';
 
 export default function ShoppingCartPage() {
     const { cart, clearCart, addToCart, decrease } = useContext(CartContext);
     const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
     const navigation = useNavigation<NavigationProp<any>>();
     const [clearCartModalVisible, setClearCartModalVisible] = useState(false);
+    const [purchaseModalVisible, setPurchaseModalVisible] = useState(false);
+
     const handleClearCart = async () => {
         clearCart();
         setClearCartModalVisible(false);
+    };
+
+    const handleFinishPurchase = () => {
+        clearCart();
+        setPurchaseModalVisible(true);
+    };
+
+    const handleClosePurchaseModal = () => {
+        setPurchaseModalVisible(false);
+        navigation.navigate('BottomTabs', { screen: 'Home' });
     };
 
     return (
@@ -58,7 +71,7 @@ export default function ShoppingCartPage() {
                         <Text style={style.emptyCartText}>Carrinho vazio</Text>
                         <MaterialIcons
                             name="remove-shopping-cart"
-                            size={iconSizes.large}
+                            size={iconSizes.extraLarge}
                             style={style.emptyIcon}
                         />
                     </View>
@@ -128,7 +141,14 @@ export default function ShoppingCartPage() {
             </ScrollView>
             <View style={style.footer}>
                 <Text style={style.totalTitle}>Total do Carrinho: G {totalPrice}</Text>
-                <Button style={style.shopButton} text="Finalizar Compra" />
+                <Pressable
+                    style={[style.shopButton, cart.length === 0 && style.buttonDisabled]}
+                    disabled={cart.length === 0}
+                    onPress={handleFinishPurchase}>
+                    <Text style={style.shopButtonTitle}>Finalizar Compra</Text>
+                </Pressable>
+
+                <PurchaseModal visible={purchaseModalVisible} onClose={handleClosePurchaseModal} />
             </View>
         </SafeAreaView>
     );
@@ -159,7 +179,7 @@ const style = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 60,
-        marginVertical: '50%',
+        marginVertical: '70%',
     },
     emptyCartText: {
         fontSize: 40,
@@ -229,6 +249,14 @@ const style = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 8,
+    },
+    buttonDisabled: {
+        opacity: 0.5,
+    },
+    shopButtonTitle: {
+        fontSize: 16,
+        color: colors.white,
+        fontWeight: 600,
     },
     totalTitle: {
         fontSize: 16,
