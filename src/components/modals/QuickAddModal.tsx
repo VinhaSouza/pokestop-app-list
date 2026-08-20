@@ -1,12 +1,12 @@
 import { useContext } from 'react';
-import { CartContext } from '../contexts/CartContext';
+import { CartContext } from '../../contexts/CartContext';
 import { Modal, Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
-import { formatName } from '../utils/formatName';
-import { colors } from '../themes/colors';
-import { iconSizes } from '../themes/iconSizes';
-import { ButtonIcon } from './ButtonIcon';
+import { formatName } from '../../utils/formatName';
+import { colors } from '../../themes/colors';
+import { iconSizes } from '../../themes/iconSizes';
+import { ButtonIcon } from '../ButtonIcon';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
-import { Button } from './Button';
+import { Button } from '../Button';
 
 interface QuickAddModalProps {
     visible: boolean;
