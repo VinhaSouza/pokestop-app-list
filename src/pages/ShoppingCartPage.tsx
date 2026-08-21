@@ -13,6 +13,8 @@ import { iconSizes } from '../themes/iconSizes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ClearCartModal from '../components/modals/ClearCartModal';
 import PurchaseModal from '../components/modals/PurchaseModal';
+import { backendApi } from '../services/api';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function ShoppingCartPage() {
     const { cart, clearCart, addToCart, decrease } = useContext(CartContext);
@@ -20,20 +22,37 @@ export default function ShoppingCartPage() {
     const navigation = useNavigation<NavigationProp<any>>();
     const [clearCartModalVisible, setClearCartModalVisible] = useState(false);
     const [purchaseModalVisible, setPurchaseModalVisible] = useState(false);
+    const { user } = useContext(AuthContext);
 
     const handleClearCart = async () => {
         clearCart();
         setClearCartModalVisible(false);
     };
 
-    const handleFinishPurchase = () => {
-        clearCart();
-        setPurchaseModalVisible(true);
-    };
+    const handlePurchase = async () => {
+        try {
+            if (!user) {
+                return;
+            }
 
-    const handleClosePurchaseModal = () => {
-        setPurchaseModalVisible(false);
-        navigation.navigate('BottomTabs', { screen: 'Home' });
+            const items = cart.map((item) => ({
+                productId: item.name,
+                quantity: item.quantity,
+            }));
+
+            const response = await backendApi.post('/orders', {
+                userId: user.id,
+                items,
+            });
+
+            console.log('Pedido criado:', response.data);
+
+            clearCart();
+
+            setPurchaseModalVisible(true);
+        } catch (error) {
+            console.log('Erro ao finalizar pedido:', error);
+        }
     };
 
     return (
@@ -144,11 +163,14 @@ export default function ShoppingCartPage() {
                 <Pressable
                     style={[style.shopButton, cart.length === 0 && style.buttonDisabled]}
                     disabled={cart.length === 0}
-                    onPress={handleFinishPurchase}>
+                    onPress={handlePurchase}>
                     <Text style={style.shopButtonTitle}>Finalizar Compra</Text>
                 </Pressable>
 
-                <PurchaseModal visible={purchaseModalVisible} onClose={handleClosePurchaseModal} />
+                <PurchaseModal
+                    visible={purchaseModalVisible}
+                    onClose={() => setPurchaseModalVisible(false)}
+                />
             </View>
         </SafeAreaView>
     );
