@@ -12,18 +12,19 @@ import { iconSizes } from '../themes/iconSizes';
 type Props = TouchableOpacityProps & {
     text: string;
     loading?: boolean;
+    loadingText?: string;
 };
 
-export function Button({ loading, ...rest }: Props) {
+export function Button({ loading = false, text, onPress, loadingText, ...rest }: Props) {
     return (
-        <TouchableOpacity {...rest} activeOpacity={0.6} disabled={loading}>
+        <TouchableOpacity {...rest} onPress={onPress} activeOpacity={0.6} disabled={loading}>
             {loading ? (
                 <View style={style.loading}>
                     <ActivityIndicator size={iconSizes.small} />
-                    <Text style={style.buttonTitle}>Entrando...</Text>
+                    <Text style={style.buttonTitle}>{loadingText ?? text}</Text>
                 </View>
             ) : (
-                <Text style={style.buttonTitle}>{rest.text}</Text>
+                <Text style={style.buttonTitle}>{text}</Text>
             )}
         </TouchableOpacity>
     );
