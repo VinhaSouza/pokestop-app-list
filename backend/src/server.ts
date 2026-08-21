@@ -59,6 +59,14 @@ app.post('/users', async (req, res) => {
     res.status(201).json(result.rows[0]);
 });
 
+app.get('/users/:id', async (req, res) => {
+    //Essa requisição será atualizada para "/users/me" futuramente.
+    const { id } = req.params;
+
+    const result = await pool.query('SELECT id, name, email FROM users WHERE id = $1', [id]);
+    res.json(result.rows[0]);
+});
+
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -86,6 +94,7 @@ app.post('/login', async (req, res) => {
         user: {
             id: user.id,
             name: user.name,
+            email: user.email,
         },
         token,
     });
@@ -187,6 +196,83 @@ app.delete('/cart/:productId', authMiddleware, async (req, res) => {
 
         res.status(500).json({
             message: 'Erro ao remover produto do carrinho.',
+        });
+    }
+});
+
+app.post('/orders', async (req, res) => {
+    try {
+        const { userId, items } = req.body;
+
+        if (!userId || !items || items.length === 0) {
+            return res.status(400).json({
+                message: 'Usuário e produtos são obrigatórios.',
+            });
+        }
+        const orderNumberResult = await pool.query(
+            `
+            SELECT COALESCE(MAX(order_number), 0) + 1 AS next_order_number FROM orders WHERE user_id = $1`,
+            [userId],
+        );
+        const orderNumber = orderNumberResult.rows[0].next_order_number;
+
+        const orderResult = await pool.query(
+            'INSERT INTO orders (user_id, order_number) VALUES ($1, $2) RETURNING id, user_id, order_number, status, created_at',
+            [userId, orderNumber],
+        );
+
+        const order = orderResult.rows[0];
+
+        for (const item of items) {
+            await pool.query(
+                'INSERT INTO order_items (order_id, product_id, quantity) VALUES ($1, $2, $3)',
+                [order.id, item.productId, item.quantity],
+            );
+        }
+
+        res.status(201).json({
+            message: 'Pedido criado com sucesso!',
+            order,
+        });
+    } catch (error) {
+        console.log('Erro ao criar pedido:', error);
+
+        res.status(500).json({
+            message: 'Erro ao criar pedido.',
+        });
+    }
+});
+
+app.get('/orders/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const result = await pool.query(
+            `SELECT 
+            o.id AS order_id, 
+            o.order_number,
+            o.user_id,
+            o.created_at, 
+            json_agg( 
+                json_build_object(
+                    'productId', oi.product_id,
+                    'quantity', oi.quantity
+                )
+            ) AS items
+            FROM orders o
+            INNER JOIN order_items oi
+            ON oi.order_id = o.id
+            WHERE o.user_id = $1
+            GROUP BY o.id, o.order_number, o.user_id, o.created_at
+            ORDER BY o.created_at DESC
+            `,
+            [userId],
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.log('Erro ao buscar pedidos:', error);
+        res.status(500).json({
+            message: 'Erro ao buscar pedidos',
         });
     }
 });
