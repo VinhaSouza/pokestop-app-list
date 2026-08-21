@@ -166,6 +166,7 @@ export default function LoginPage() {
                                 style={style.button}
                                 text="ENTRAR"
                                 loading={loading}
+                                loadingText="Entrando..."
                                 onPress={handleLogin}
                             />
                         </View>

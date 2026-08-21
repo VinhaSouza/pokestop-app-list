@@ -28,6 +28,7 @@ export default function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setshowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [erros, setErros] = useState({ name: '', email: '', password: '' });
 
     function handleTextChange(
@@ -63,6 +64,7 @@ export default function RegisterPage() {
             email: '',
             password: '',
         });
+        setLoading(true);
 
         try {
             await backendApi.post('/users', { name, email, password });
@@ -156,6 +158,8 @@ export default function RegisterPage() {
                             <Button
                                 style={style.button}
                                 text="REGISTRAR"
+                                loading={loading}
+                                loadingText="Cadastrando..."
                                 onPress={handleRegister}
                             />
                         </View>
