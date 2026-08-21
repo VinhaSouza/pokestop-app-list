@@ -3,6 +3,7 @@ import React, { createContext, ReactNode, useState } from 'react';
 interface User {
     id: number;
     name: string;
+    email: string;
 }
 
 interface AuthContextData {
